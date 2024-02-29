@@ -1,1 +1,205 @@
-<h1>jfjkjfk</h1>
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="hero" >
+  <section id="hero" class="d-flex align-items-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+          <h1>Bike & Car Repair Service</h1>
+          <h2>Anytime & Anywhere in Nepal</h2>
+          <div class="d-flex justify-content-center justify-content-lg-start">
+            <a href="#about" class="btn-get-started scrollto">Book a Service</a>
+          </div>
+          <h2>sdfs</h2>
+          <div class="right-align">
+            <h5>24/7 Service</h5>
+            <a href="/accounts/registerUser/" class="btn btn-success">Sign Up</a>
+        </div>
+        </div>
+        <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="zoom-in" data-aos-delay="200">
+          <img src="static/images/car.png" class="img-fluid animated" alt="">
+        </div>
+        
+      </div>
+      
+    </div>
+
+  </section>
+</div>
+<div class ="product" >
+<div class="container-xl">
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Featured <b>Products</b></h2>
+      <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="0">
+      <!-- Carousel indicators -->
+      <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+      </ol>   
+      <!-- Wrapper for carousel items -->
+      <div class="carousel-inner">
+        <div class="item carousel-item active">
+          <div class="row">
+            <div class="col-sm-3">
+              <div class="thumb-wrapper">
+                <span class="wish-icon"><i class="fa fa-heart-o"></i></span>
+                <div class="img-box">
+                  <img src="/examples/images/products/ipad.jpg" class="img-fluid" alt="">									
+                </div>
+                <div class="thumb-content">
+                  <h4>Apple iPad</h4>									
+                  <div class="star-rating">
+                    <ul class="list-inline">
+                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                      <li class="list-inline-item"><i class="fa fa-star-o"></i></li>
+                    </ul>
+                  </div>
+                  <p class="item-price"><strike>$400.00</strike> <b>$369.00</b></p>
+                  <a href="#" class="btn btn-primary">Add to Cart</a>
+                </div>						
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="thumb-wrapper">
+                <span class="wish-icon"><i class="fa fa-heart-o"></i></span>
+                <div class="img-box">
+                  <img src="/examples/images/products/headphone.jpg" class="img-fluid" alt="Headphone">
+                </div>
+                <div class="thumb-content">
+                  <h4>Sony Headphone</h4>									
+                  <div class="star-rating">
+                    <ul class="list-inline">
+                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                      <li class="list-inline-item"><i class="fa fa-star-o"></i></li>
+                    </ul>
+                  </div>
+                  <p class="item-price"><strike>$25.00</strike> <b>$23.99</b></p>
+                  <a href="#" class="btn btn-primary">Add to Cart</a>
+                </div>						
+              </div>
+            </div>		
+            <div class="col-sm-3">
+              <div class="thumb-wrapper">
+                <span class="wish-icon"><i class="fa fa-heart-o"></i></span>
+                <div class="img-box">
+                  <img src="/examples/images/products/macbook-air.jpg" class="img-fluid" alt="Macbook">
+                </div>
+                <div class="thumb-content">
+                  <h4>Macbook Air</h4>									
+                  <div class="star-rating">
+                    <ul class="list-inline">
+                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                      <li class="list-inline-item"><i class="fa fa-star-half-o"></i></li>
+                    </ul>
+                  </div>
+                  <p class="item-price"><strike>$899.00</strike> <b>$649.00</b></p>
+                  <a href="#" class="btn btn-primary">Add to Cart</a>
+                </div>						
+              </div>
+            </div>								
+            <div class="col-sm-3">
+              <div class="thumb-wrapper">
+                <span class="wish-icon"><i class="fa fa-heart-o"></i></span>
+                <div class="img-box">
+                  <img src="/examples/images/products/nikon.jpg" class="img-fluid" alt="Nikon">
+                </div>
+                <div class="thumb-content">
+                  <h4>Nikon DSLR</h4>									
+                  <div class="star-rating">
+                    <ul class="list-inline">
+                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                      <li class="list-inline-item"><i class="fa fa-star-o"></i></li>
+                      <li class="list-inline-item"><i class="fa fa-star-o"></i></li>
+                    </ul>
+                  </div>
+                  <p class="item-price"><strike>$315.00</strike> <b>$250.00</b></p>
+                  <a href="#" class="btn btn-primary">Add to Cart</a>
+                </div>						
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Carousel controls -->
+      <a class="carousel-control-prev" href="#myCarousel" data-slide="prev">
+        <i class="fa fa-angle-left"></i>
+      </a>
+      <a class="carousel-control-next" href="#myCarousel" data-slide="next">
+        <i class="fa fa-angle-right"></i>
+      </a>
+    </div>
+    </div>
+  </div>
+</div>
+<section class="ftco-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 text-center mb-5">
+        <h2 class="heading-section">Login #04</h2>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-md-12 col-lg-10">
+        <div class="wrap d-md-flex">
+          <div class="img" style="background-image: url(images/bg-1.jpg);">
+          </div>
+          <div class="login-wrap p-4 p-md-5">
+            <div class="d-flex">
+              <div class="w-100">
+                <h3 class="mb-4">Sign In</h3>
+              </div>
+              <div class="w-100">
+                <p class="social-media d-flex justify-content-end">
+                  <a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-facebook"></span></a>
+                  <a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-twitter"></span></a>
+                </p>
+              </div>
+            </div>
+            <form action="#" class="signin-form">
+              <div class="form-group mb-3">
+                <label class="label" for="name">Username</label>
+                <input type="text" class="form-control" placeholder="Username" required>
+              </div>
+              <div class="form-group mb-3">
+                <label class="label" for="password">Password</label>
+                <input type="password" class="form-control" placeholder="Password" required>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="form-control btn1 btn-primary rounded submit px-3">Sign In</button>
+              </div>
+              <div class="form-group d-md-flex">
+                <div class="w-50 text-left">
+                  <label class="checkbox-wrap checkbox-primary mb-0">Remember Me
+                  <input type="checkbox" checked>
+                  <span class="checkmark"></span>
+                  </label>
+                </div>
+                <div class="w-50 text-md-right">
+                  <a href="#">Forgot Password</a>
+                </div>
+              </div>
+            </form>
+            <p class="text-center">Not a member? <a data-toggle="tab" href="#signup">Sign Up</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}
