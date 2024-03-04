@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'BhatkyoMain',
     'Accounts',
+    'mechanic_shop',
+    'multiselectfield',
 ]
 
 MIDDLEWARE = [

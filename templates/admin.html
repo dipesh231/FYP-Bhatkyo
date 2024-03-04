@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+{%load static%}
+<main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+
+
+<section id = "Form" class="Form my-4 mx-5">
+    <div class="container">
+        <div class="row no-gutters">
+            <div class="col-lg-5">
+                <img src = "{% static 'assets/img/projects/nba2.jpg' %}" class = "img-fluid" alt="dsjhgfuh">
+            </div>
+            <div class="col-lg-7">
+                <h1 class="font-weight-bold px-5 pt-5">Services</h1>
+                <h4>Add Services</h4>
+                
+            <form action = "" method = "POST" enctype = "multipart/form-data">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col-lg-7">
+                        Name: <input type="text"  name = "name" class="form-control my-3 p-3">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-lg-7">
+                        Description: <input type="text"  name = "description" class="form-control my-3 p-3">
+                    </div>
+                </div>
+                    <div class="form-row">
+                        <div class="col-lg-7">
+                            Photo: <input type="file"  name = "service_picture" class="form-control my-3 p-3">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-lg-7">
+                            Price <input type="file"  name = "price" class="form-control my-3 p-3">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-lg-7">
+                            <input type="submit"  value="Upload" class = "btn1 mt-3 mb-5"></input>
+                        </div>
+                    </div>
+            </form>  
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+{%endblock%}
