@@ -1,16 +1,32 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+from .utils import detectUser
 from mechanic_shop.models import Service, Shop
-
+from django.core.exceptions import PermissionDenied
 from mechanic_shop.forms import ShopForm
-
+from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import User, UserProfile
 from .forms import UserForm
-from django.contrib import messages
+from django.contrib import messages, auth
 # Create your views here.
 
+def check_role_shop(user):
+    if user.role == 1:
+        return True
+    else:
+        raise PermissionDenied
+    
+def check_role_customer(user):
+    if user.role == 2:
+        return True
+    else:
+        raise PermissionDenied
+
 def registerUser(request):
-    if request.method == 'POST':
+    if request.user.is_authenticated:
+        messages.warning(request, 'You are already logged in!!')
+        return redirect('dashboard')
+    elif request.method == 'POST':
         form = UserForm(request.POST)
         if form.is_valid():
             password = form.cleaned_data['password']
@@ -31,7 +47,10 @@ def registerUser(request):
     return render(request, 'accounts/registerUser.html', context) 
 
 def registerShop(request):
-    if request.method == 'POST':
+    if request.user.is_authenticated:
+        messages.warning(request, 'You are already logged in!!')
+        return redirect('dashboard')
+    elif request.method == 'POST':
         form = UserForm(request.POST, request.FILES)
         s_form = ShopForm(request.POST, request.FILES)
         if form.is_valid() and s_form.is_valid():
@@ -75,3 +94,44 @@ def registerShop(request):
         'vehicle_choices': vehicle_choices,
     }
     return render(request, 'accounts/registerShop.html', context)
+
+def login(request):
+    if request.user.is_authenticated:
+        messages.warning(request, 'You are already logged in!!')
+        return redirect('myAccount')
+    elif request.method == 'POST':
+        email = request.POST['email']
+        password = request.POST['password']
+        user = auth.authenticate(email=email, password=password)
+
+        if user is not None:
+            auth.login(request, user)
+            messages.success(request, "You are now logged in..")
+            return redirect('myAccount')
+        else:
+            messages.error(request, "Invalid login Credentials")
+            return redirect('login')
+    return render(request, 'accounts/login.html')
+
+
+
+def logout(request):
+    auth.logout(request)
+    messages.info(request, 'You are logged Out..')
+    return redirect('login')
+
+@login_required(login_url='login')
+def myAccount(request):
+    user = request.user
+    redirectUrl = detectUser(user)
+    return redirect(redirectUrl)
+
+@login_required(login_url='login')
+@user_passes_test(check_role_customer)
+def customerDashboard(request):
+    return render(request, 'accounts/customerDashboard.html')
+
+@login_required(login_url='login')
+@user_passes_test(check_role_shop)
+def shopDashboard(request):
+    return render(request, 'accounts/shopDashboard.html')
