@@ -44,7 +44,6 @@ a {
 .site-navbar {
   margin-bottom: 0px;
   z-index: 1999;
-  position: fixed;
   width: 100%; 
   background-color: black;
 }
@@ -693,11 +692,12 @@ a {
         }
 
         .product {
-          width: 100%;
-          margin-top: 212px;
-          height: 500px;
+          width: auto;
+          margin-top: 212px; /* Adjust as needed */
+          height: 500px; /* Adjust as needed */
           background-color: #cccccc;
         }
+        
         .product h2 {
           color: #000;
           font-size: 26px;
@@ -707,6 +707,7 @@ a {
           position: relative;
           margin: 30px 0 60px;
         }
+        
         .product h2::after {
           content: "";
           width: 100px;
@@ -719,16 +720,19 @@ a {
           right: 0;
           bottom: -20px;
         }
+        
         .carousel {
-          margin: 50px auto;
-          padding: 0 70px;
+          margin: 50px auto; /* Adjust as needed */
+          padding: 0 70px; /* Adjust as needed */
         }
+        
         .carousel .item {
           color: #747d89;
           min-height: 325px;
           text-align: center;
           overflow: hidden;
         }
+        
         .carousel .thumb-wrapper {
           padding: 25px 15px;
           background: #fff;
@@ -737,12 +741,14 @@ a {
           position: relative;
           box-shadow: 0 2px 3px rgba(0,0,0,0.2);
         }
+        
         .carousel .item .img-box {
           height: 120px;
           margin-bottom: 20px;
           width: 100%;
           position: relative;
         }
+        
         .carousel .item img {	
           max-width: 100%;
           max-height: 100%;
@@ -753,12 +759,15 @@ a {
           left: 0;
           right: 0;
         }
+        
         .carousel .item h4 {
           font-size: 18px;
         }
+        
         .carousel .item h4, .carousel .item p, .carousel .item ul {
           margin-bottom: 5px;
         }
+        
         .carousel .thumb-content .btn {
           color: #7ac400;
           font-size: 11px;
@@ -771,24 +780,29 @@ a {
           line-height: 16px;
           border-radius: 20px;
         }
+        
         .carousel .thumb-content .btn:hover, .carousel .thumb-content .btn:focus {
           color: #fff;
           background: #7ac400;
           box-shadow: none;
         }
+        
         .carousel .thumb-content .btn i {
           font-size: 14px;
           font-weight: bold;
           margin-left: 5px;
         }
+        
         .carousel .item-price {
           font-size: 13px;
           padding: 2px 0;
         }
+        
         .carousel .item-price strike {
           opacity: 0.7;
           margin-right: 5px;
         }
+        
         .carousel-control-prev, .carousel-control-next {
           height: 44px;
           width: 40px;
@@ -797,10 +811,12 @@ a {
           border-radius: 4px;
           opacity: 0.8;
         }
+        
         .carousel-control-prev:hover, .carousel-control-next:hover {
           background: #080b03;
           opacity: 1;
         }
+        
         .carousel-control-prev i, .carousel-control-next i {
           font-size: 36px;
           position: absolute;
@@ -814,15 +830,19 @@ a {
           text-shadow: none;
           font-weight: bold;
         }
+        
         .carousel-control-prev i {
           margin-left: -2px;
         }
+        
         .carousel-control-next i {
           margin-right: -4px;
         }		
+        
         .carousel-indicators {
           bottom: -50px;
         }
+        
         .carousel-indicators li, .carousel-indicators li.active {
           width: 10px;
           height: 10px;
@@ -830,12 +850,15 @@ a {
           border-radius: 50%;
           border: none;
         }
+        
         .carousel-indicators li {	
           background: rgba(0, 0, 0, 0.2);
         }
+        
         .carousel-indicators li.active {	
           background: rgba(0, 0, 0, 0.6);
         }
+        
         .carousel .wish-icon {
           position: absolute;
           right: 10px;
@@ -845,16 +868,20 @@ a {
           font-size: 16px;
           color: #abb0b8;
         }
+        
         .carousel .wish-icon .fa-heart {
           color: #ff6161;
         }
+        
         .star-rating li {
           padding: 0;
         }
+        
         .star-rating i {
           font-size: 14px;
           color: #ffc000;
         }
+        
         .footer {
           color: black;
           font-size: 14px;
@@ -966,4 +993,145 @@ a {
         .footer .footer-legal .credits a {
           color: var(--color-primary);
         }
+
+        .title{
+          margin-bottom: 5vh;
+      }
+      
+       .productDetail .card{
+          margin: auto;
+          max-width: 950px;
+          width: 70%;
+          box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+          border-radius: 1rem;
+          border: transparent;
+      }
+      @media(max-width:767px){
+          .card{
+              margin: 3vh auto;
+          }
+      }
+      .productDetail .cart{
+          background-color: white;
+          padding: 4vh 5vh;
+          border-bottom-left-radius: 1rem;
+          border-top-left-radius: 1rem;
+      }
+      @media(max-width:767px){
+        .productDetail .cart{
+              padding: 4vh;
+              border-bottom-left-radius: unset;
+              border-top-right-radius: 1rem;
+          }
+      }
+      .productDetail .summary{
+          background-color: #ddd;
+          border-top-right-radius: 1rem;
+          border-bottom-right-radius: 1rem;
+          padding: 4vh;
+          color: rgb(65, 65, 65);
+      }
+      @media(max-width:767px){
+        .productDetail .summary{
+          border-top-right-radius: unset;
+          border-bottom-left-radius: 1rem;
+          }
+      }
+      .productDetail .summary .col-2{
+          padding: 0;
+      }
+      .productDetail .summary .col-10
+      {
+          padding: 0;
+      }.productDetail .row{
+          margin: 0;
+      }
+      .productDetail .title b{
+          font-size: 1.5rem;
+      }
+      .productDetail .main{
+          margin: 0;
+          padding: 2vh 0;
+          width: 100%;
+      }
+      .productDetail .col-2, .col{
+          padding: 0 1vh;
+      }
+      .productDetail a{
+          padding: 0 1vh;
+      }
+      .productDetail .close{
+          margin-left: auto;
+          font-size: 0.7rem;
+      }
+      .productDetail img{
+          width: 3.5rem;
+      }
+      .productDetail .back-to-shop{
+          margin-top: 4.5rem;
+      }
+      .productDetail h5{
+          margin-top: 4vh;
+      }
+      .productDetail hr{
+          margin-top: 1.25rem;
+      }
+      .productDetail form{
+          padding: 2vh 0;
+      }
+      .productDetail select{
+          border: 1px solid rgba(0, 0, 0, 0.137);
+          padding: 1.5vh 1vh;
+          margin-bottom: 4vh;
+          outline: none;
+          width: 100%;
+          background-color: rgb(247, 247, 247);
+      }
+      .productDetail input{
+          border: 1px solid rgba(0, 0, 0, 0.137);
+          padding: 1vh;
+          margin-bottom: 4vh;
+          outline: none;
+          width: 100%;
+          background-color: rgb(247, 247, 247);
+      }
+      .productDetail input:focus::-webkit-input-placeholder
+      {
+            color:transparent;
+      }
+      .productDetail .btn{
+          background-color: #000;
+          border-color: #000;
+          color: white;
+          width: 100%;
+          font-size: 0.7rem;
+          margin-top: 4vh;
+          padding: 1vh;
+          border-radius: 0;
+      }
+      .productDetail .btn:focus{
+          box-shadow: none;
+          outline: none;
+          box-shadow: none;
+          color: white;
+          -webkit-box-shadow: none;
+          -webkit-user-select: none;
+          transition: none; 
+      }
+      .productDetail .btn:hover{
+          color: white;
+      }
+      .productDetail a{
+          color: black; 
+      }
+      .productDetail a:hover{
+          color: black;
+          text-decoration: none;
+      }
+      .productDetail #code{
+          background-image: linear-gradient(to left, rgba(255, 255, 255, 0.253) , rgba(255, 255, 255, 0.185)), url("https://img.icons8.com/small/16/000000/long-arrow-right.png");
+          background-repeat: no-repeat;
+          background-position-x: 95%;
+          background-position-y: center;
+      }
         

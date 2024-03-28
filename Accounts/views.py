@@ -1,5 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+
+from bookings.models import BookService
 from .utils import detectUser
 from mechanic_shop.models import Service, Shop
 from django.core.exceptions import PermissionDenied
@@ -74,7 +76,7 @@ def registerShop(request):
             # Handle selected vehicle
             vehicle = request.POST.get('vehicles')
             shop.vehicles = vehicle
-
+            shop.verification_status = 'pending' 
             shop.save()  # Save the Shop instance again after associating many-to-many relationships
 
             messages.success(request, 'Your account has been registered successfully! Please wait for the approval')
@@ -103,7 +105,6 @@ def login(request):
         email = request.POST['email']
         password = request.POST['password']
         user = auth.authenticate(email=email, password=password)
-
         if user is not None:
             auth.login(request, user)
             messages.success(request, "You are now logged in..")
@@ -112,7 +113,6 @@ def login(request):
             messages.error(request, "Invalid login Credentials")
             return redirect('login')
     return render(request, 'accounts/login.html')
-
 
 
 def logout(request):
@@ -129,9 +129,17 @@ def myAccount(request):
 @login_required(login_url='login')
 @user_passes_test(check_role_customer)
 def customerDashboard(request):
-    return render(request, 'accounts/customerDashboard.html')
+    bookings = BookService.objects.filter(user=request.user)
+    return render(request, 'accounts/customerDashboard.html',{'bookings': bookings})
 
 @login_required(login_url='login')
 @user_passes_test(check_role_shop)
 def shopDashboard(request):
-    return render(request, 'accounts/shopDashboard.html')
+    shop = Shop.objects.get(user=request.user)
+    bookings = BookService.objects.filter(shop=shop)
+    context = {
+        'shop': shop,
+        'bookings': bookings,
+        'current_page': "Dashboard",
+    }
+    return render(request, 'accounts/shopDashboard.html', context)

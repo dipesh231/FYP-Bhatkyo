@@ -1,0 +1,15 @@
+{% load static %}
+<div class="breadcrumbs d-flex align-items-center" style="background-image: url({{shop.shop_image.url }});">
+    <div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
+        <div class = "img-holder" style="float: left;">
+            <figure>
+                <img src = "{{ shop.user_profile.profile_picture.url }}" width="70" height="70" >
+            </figure>
+        </div>
+        <h2>{{ shop.shop_name }}</h2>
+        <ol>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li>{{ current_page }}</li>
+        </ol>
+    </div>
+</div>

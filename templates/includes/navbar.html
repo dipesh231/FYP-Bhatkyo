@@ -1,47 +1,46 @@
+
 {% load static %}
-<div class="site-mobile-menu">
-    <div class="site-mobile-menu-header">
-      <div class="site-mobile-menu-close mt-3">
-        <span class="icon-close2 js-menu-toggle"></span>
-      </div>
-    </div>
-    <div class="site-mobile-menu-body"></div>
-  </div>
-<header class="site-navbar" role="banner">
+<header id="header" class="header d-flex align-items-center">
+  <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
-    <div class="container">
-      <div class="row align-items-center">
-        
-        <div class="col-11 col-xl-2">
-          <h1 class="mb-0 site-logo"><a href="/" class="text-white mb-0">BHATKYO</a></h1>
-        </div>
-        <div class="col-12 col-md-10 d-none d-xl-block">
-          <nav class="site-navigation position-relative text-right" role="navigation">
+    <a href="{% url 'index' %}" class="logo d-flex align-items-center">
+      
+      <h1>BHATKYO<span>.</span></h1>
+    </a>
 
-            <ul class="site-menu js-clone-nav mr-auto d-none d-lg-block">
-              <li class="active"><a href="{% url 'index' %}"><span>Home</span></a></li>
-              <li class="has-children">
-                <a href="about.html"><span>Services</span></a>
-                <ul class="dropdown arrow-top">
-                  <li><a href="#">Menu One</a></li>
-                  <li><a href="#">Menu Two</a></li>
-                  <li><a href="#">Menu Three</a></li>
-                </ul>
-              </li>
-              <li><a href="listings.html"><span>Listings</span></a></li>
-              <li><a href="about.html"><span>About</span></a></li>
-              <li><a href="blog.html"><span>Blog</span></a></li>
-              <li><a href="contact.html"><span>Contact</span></a></li>
-              {% if user.is_authenticated %}
-              <li style="text-color:red;"><a href="{% url 'myAccount' %}" ><span> My Account</span></a></li>
-              <a href="{% url 'logout' %}" class="btn btn-danger ml-3"><span>Logout</span></a>
-              {% else %}
-              <a href="{% url 'login' %}" class="btn btn-success"><span>Login</span></a>
-              {% endif %}
+    <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+    <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
+    <nav id="navbar" class="navbar">
+      <ul>
+        <li><a href="{% url 'index' %}" class="active">Home</a></li>
+        <li><a href="footer.html">About</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+          <ul>
+            <li><a href="#">Dropdown 1</a></li>
+            <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+              <ul>
+                <li><a href="#">Deep Dropdown 1</a></li>
+                <li><a href="#">Deep Dropdown 2</a></li>
+                <li><a href="#">Deep Dropdown 3</a></li>
+                <li><a href="#">Deep Dropdown 4</a></li>
+                <li><a href="#">Deep Dropdown 5</a></li>
               </ul>
-          </nav>
-        </div>
-      </div>
-      </div>
-    </div>
-  </header>
+            </li>
+          </ul>
+        </li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="{% url 'cart_detail' %}" class="cart-icon" class="count" {{request.session.cart|length}}><i class="bi bi-cart3" style="font-size: 24px;"></i></a></li>
+        {% if user.is_authenticated %}
+            <li><a href="{% url 'myAccount' %}" > My Account</a></li>
+             <li><a href="{% url 'logout' %}" class="btn btn-danger ml-3">Logout</span></a>
+            {% else %}
+            <a href="{% url 'login' %}" class="btn btn-success"><span>Login</span></a>
+          {% endif %}
+             </li>
+      </ul>
+    </nav><!-- .navbar -->
+  </div>
+</header>

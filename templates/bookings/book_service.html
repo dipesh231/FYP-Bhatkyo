@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <style>
+        
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+        }
+        form {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+<div class="productDes">
+    <h1>Book Service</h1>
+    <form method="post">
+        {% csrf_token %}
+        <input type="" name="user" value="{{ user.email }}" placeholder="User Email" required>
+        <input type="" name="shop_name" value="{{ shop.shop_name }}" placeholder="Shop Name" required>
+        {{ form.as_p }}
+        <button type="submit">Book Service</button>
+    </form>
+</div>
+{% endblock %}

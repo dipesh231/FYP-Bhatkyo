@@ -41,7 +41,14 @@ INSTALLED_APPS = [
     'Accounts',
     'mechanic_shop',
     'multiselectfield',
+    'products',
+    'cart',
+    'services',
+    'bookings',
+
 ]
+
+CART_SESSION_ID = 'cart'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -66,6 +73,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'cart.context_processor.cart_total_amount',
+                'Accounts.context_processors.get_shop',
             ],
         },
     },
@@ -141,3 +150,6 @@ from django.contrib.messages import constants as messages
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
+
+STRIPE_SECRET_KEY = 'sk_test_51OxOBC2LcDfep72U7pvLBM6y0BiuKWhcL0EzR89QUbCennzJRAPU8ei19l7HZjmbrgMEU936Iv2W0sjZIqTc3oHb00mMo94wE6'
+STRIPE_PUBLIC_KEY = 'pk_test_51OxOBC2LcDfep72UeTQJU3lGhyNrtxQgqPKIprav9O5KorqJswchk3Yginy5LSsdgrK52XaE7Cgw6djM8rQPaM0z00GtpRZvyz'

@@ -21,4 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("BhatkyoMain.urls")),
     path('accounts/', include('Accounts.urls')),
+    path('products/', include('products.urls')),
+    path('bookings/', include('bookings.urls')),
 ]

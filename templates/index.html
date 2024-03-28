@@ -3,172 +3,200 @@
 {% load static %}
 
 {% block content %}
-<div class="hero" >
-  <section id="hero" class="d-flex align-items-center">
+
+<section id="hero" class="hero">
+  <div class="info d-flex align-items-center">
     <div class="container">
       <div class="row">
-        <div class="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+        <div class="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="" data-aos-delay="200">
+          <h1 style=" font-size:55px; color: white">Bike & Car Repair Service</h1>
+          <h1 style="font-size:45px; color: white;">Anytime & Anywhere in Nepal</h1>
+          <div class="d-flex justify-content-center justify-content-lg-start">
+            <a href="#about" class="btn-get-started">Book a Service</a>
+          </div>
+          <h5 style="font-size:45px; color: white;">sdfs</h5>
+          <div class="right-align">
+            <h5 style="font-size:25px; color: white;">24/7 Service</h5>
+            <a href="{% url 'registerUser' %}" class="btn btn-success"  style="margin-left:300px;">Sign Up</a>
+          </div>
+        </div>
+        <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="" data-aos-delay="200">
+          <img src="{% static 'images/car.png' %}" class="img-fluid animated" alt="">
+        </div>
+      </div>
+    </div>
+    </div>
+  
+
+  <div id="hero-carousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+
+    <div class="carousel-item active" style="background-image: url({% static 'img/hero-carousel/hero-carousel-1.jpg' %})"></div>
+{% comment %} <div class="carousel-item" style="background-image: url({% static 'img/hero-carousel/hero-carousel-2.jpg' %})"></div>
+<div class="carousel-item" style="background-image: url({% static 'img/hero-carousel/hero-carousel-3.jpg' %})"></div>
+<div class="carousel-item" style="background-image: url({% static 'img/hero-carousel/hero-carousel-4.jpg' %})"></div>
+<div class="carousel-item" style="background-image: url({% static 'img/hero-carousel/hero-carousel-5.jpg' %})"></div> {% endcomment %}
+    <a class="carousel-control-prev" href="#hero-carousel" role="button" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon bi bi-chevron-left" aria-hidden="true"></span>
+    </a>
+
+    <a class="carousel-control-next" href="#hero-carousel" role="button" data-bs-slide="next">
+      <span class="carousel-control-next-icon bi bi-chevron-right" aria-hidden="true"></span>
+    </a>
+
+  </div>
+
+  <main id="main">
+    <section id="services" class="services section-bg">
+        <div class="container" data-aos="fade-up">
+            <div class="section-header">
+                <h2>Featured <b>Services</b></h2>
+                <p>Voluptatem quibusdam ut ullam perferendis repellat non ut consequuntur est eveniet deleniti fignissimos eos quam</p>
+            </div>
+            <div class="row gy-4">
+              {% for shop in shops %}
+              <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                  <div class="service-item position-relative">
+                      <img src="{{ shop.shop_image }}">
+                      <h4>{{ shop.shop_name }}</h4>
+                      <h4>Vehicle Choices: {{ shop.vehicles }}</h4>
+                      <h4>Services:</h4>
+                      {% for service in shop.services.all %}
+                      {{ service.name }}
+                      {% endfor %}
+                      <form action="{% url 'book_service' shop.id %}" method="post">
+                          {% csrf_token %}
+                          <input type="hidden" name="shop_id" value="{{ shop.id }}">
+                          {{ form.as_p }}
+                          <button type="submit" class="btn btn-primary">Book Service</button>
+                      </form>
+                  </div>
+              </div>
+              {% endfor %}
+          </div>
+        </div>
+    </section>
+
+<div class="product">
+  <div class="container-xl">
+      <div class="row">
+          <div class="col-md-12">
+              <h2>Featured <b>Services</b></h2>
+              <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="0">
+                <!-- Wrapper for carousel items -->
+                <div class="carousel-inner">
+                        <div class="row">
+                          {% for shop in shops %}
+                            <div class="col-sm-3">
+                                <a href="" class="product-link">
+                                    <div class="thumb-wrapper">
+                                        <span class="wish-icon"><i class="fa fa-heart-o"></i></span>
+                                        <div class="img-box">
+                                            <img src="" class="img-fluid">
+                                        </div>
+                                        <div class="thumb-content">
+                                            <h4>{{ shop.shop_name }}</h4>
+                                            <h4>Vehicle Choices: {{ shop.vehicles }}</h4>
+                                              Services: 
+                                              {% for service in shop.services.all %}
+                                              <li>{{ service.name }}</li>
+                                            {% endfor %}
+                                          
+                                            <form action="{% url 'book_service' shop.id %}" method="post">
+                                              {% csrf_token %}
+                                              <input type="hidden" name="shop_id" value="{{ shop.id }}">
+                                              {{ form.as_p }}
+                                              <button type="submit" class="btn btn-primary">Book Service</button>
+                                          </form>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                   
+                </div>
+                <!-- Carousel controls -->
+                <a class="carousel-control-prev" href="#myCarousel" data-slide="prev">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                <a class="carousel-control-next" href="#myCarousel" data-slide="next">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+            
+          </div>
+      </div>
+  </div>
+</div>
+<div class="product">
+  <div class="container-xl">
+      <div class="row">
+          <div class="col-md-12">
+              <h2>Featured <b>Products</b></h2>
+              <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="0">
+                <!-- Wrapper for carousel items -->
+                <div class="carousel-inner">
+                  <div class="row">
+                    {% for product in products %}
+                            <div class="col-sm-3">
+                                <a href="{% url 'productDetail' product.id %}" class="product-link">
+                                    <div class="thumb-wrapper">
+                                        <span class="wish-icon"><i class="fa fa-heart-o"></i></span>
+                                        <div class="img-box">
+                                            <img src="{{ product.product_image.url }}" class="img-fluid" alt="{{ product.product_name }}">
+                                        </div>
+                                        <div class="thumb-content">
+                                            <h4>{{ product.product_name }}</h4>
+                                            <p>{{ product.description|truncatewords:10 }}</p>
+                                            <p>Price: ${{ product.price }}</p>
+                                            <p>Total Quantity: {{ product.total_quantity }}</p>
+                                            <p>Availability: {{ product.availability }}</p>
+                                            <a href="" class="btn btn-primary">Buy Now</a>
+                                            <a href="{% url 'cart_add' product.id %}" class="btn btn-primary">Add to Cart</a>
+
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                    {% endfor %}
+                          </div>
+                </div>
+                <!-- Carousel controls -->
+                {% comment %} <a class="carousel-control-prev" href="#myCarousel" data-slide="prev">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                <a class="carousel-control-next" href="#myCarousel" data-slide="next">
+                    <i class="fa fa-angle-right"></i>
+                </a> {% endcomment %}
+            </div>
+            
+          </div>
+      </div>
+  </div>
+</div>
+
+{% comment %} <section id="register-shop" class="hero1">
+  <div class="info d-flex align-items-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="" data-aos-delay="200">
           <h1>Bike & Car Repair Service</h1>
           <h2>Anytime & Anywhere in Nepal</h2>
           <div class="d-flex justify-content-center justify-content-lg-start">
-            <a href="#about" class="btn-get-started scrollto">Book a Service</a>
+            <a href="#about" class="btn-get-started scrollto">Register Shop</a>
           </div>
           <h2>sdfs</h2>
           <div class="right-align">
             <h5>24/7 Service</h5>
-            <a href="/accounts/registerUser/" class="btn btn-success">Sign Up</a>
-        </div>
-        </div>
-        <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="zoom-in" data-aos-delay="200">
-          <img src="static/images/car.png" class="img-fluid animated" alt="">
-        </div>
-        
-      </div>
-      
-    </div>
-
-  </section>
-</div>
-<div class ="product" >
-<div class="container-xl">
-  <div class="row">
-    <div class="col-md-12">
-      <h2>Featured <b>Products</b></h2>
-      <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="0">
-      <!-- Carousel indicators -->
-      <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
-      </ol>   
-      <!-- Wrapper for carousel items -->
-      <div class="carousel-inner">
-        <div class="item carousel-item active">
-          <div class="row">
-            <div class="col-sm-3">
-              <div class="thumb-wrapper">
-                <span class="wish-icon"><i class="fa fa-heart-o"></i></span>
-                <div class="img-box">
-                  <img src="/examples/images/products/ipad.jpg" class="img-fluid" alt="">									
-                </div>
-                <div class="thumb-content">
-                  <h4>Apple iPad</h4>									
-                  <div class="star-rating">
-                    <ul class="list-inline">
-                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                      <li class="list-inline-item"><i class="fa fa-star-o"></i></li>
-                    </ul>
-                  </div>
-                  <p class="item-price"><strike>$400.00</strike> <b>$369.00</b></p>
-                  <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>						
-              </div>
-            </div>
-            <div class="col-sm-3">
-              <div class="thumb-wrapper">
-                <span class="wish-icon"><i class="fa fa-heart-o"></i></span>
-                <div class="img-box">
-                  <img src="/examples/images/products/headphone.jpg" class="img-fluid" alt="Headphone">
-                </div>
-                <div class="thumb-content">
-                  <h4>Sony Headphone</h4>									
-                  <div class="star-rating">
-                    <ul class="list-inline">
-                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                      <li class="list-inline-item"><i class="fa fa-star-o"></i></li>
-                    </ul>
-                  </div>
-                  <p class="item-price"><strike>$25.00</strike> <b>$23.99</b></p>
-                  <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>						
-              </div>
-            </div>		
-            <div class="col-sm-3">
-              <div class="thumb-wrapper">
-                <span class="wish-icon"><i class="fa fa-heart-o"></i></span>
-                <div class="img-box">
-                  <img src="/examples/images/products/macbook-air.jpg" class="img-fluid" alt="Macbook">
-                </div>
-                <div class="thumb-content">
-                  <h4>Macbook Air</h4>									
-                  <div class="star-rating">
-                    <ul class="list-inline">
-                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                      <li class="list-inline-item"><i class="fa fa-star-half-o"></i></li>
-                    </ul>
-                  </div>
-                  <p class="item-price"><strike>$899.00</strike> <b>$649.00</b></p>
-                  <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>						
-              </div>
-            </div>								
-            <div class="col-sm-3">
-              <div class="thumb-wrapper">
-                <span class="wish-icon"><i class="fa fa-heart-o"></i></span>
-                <div class="img-box">
-                  <img src="/examples/images/products/nikon.jpg" class="img-fluid" alt="Nikon">
-                </div>
-                <div class="thumb-content">
-                  <h4>Nikon DSLR</h4>									
-                  <div class="star-rating">
-                    <ul class="list-inline">
-                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                      <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                      <li class="list-inline-item"><i class="fa fa-star-o"></i></li>
-                      <li class="list-inline-item"><i class="fa fa-star-o"></i></li>
-                    </ul>
-                  </div>
-                  <p class="item-price"><strike>$315.00</strike> <b>$250.00</b></p>
-                  <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>						
-              </div>
-            </div>
+            <a href="/accounts/registerShop/" class="btn btn-success" type="submit" style="margin-left:300px;">Register Shop</a>
           </div>
         </div>
-      </div>
-      <!-- Carousel controls -->
-      <a class="carousel-control-prev" href="#myCarousel" data-slide="prev">
-        <i class="fa fa-angle-left"></i>
-      </a>
-      <a class="carousel-control-next" href="#myCarousel" data-slide="next">
-        <i class="fa fa-angle-right"></i>
-      </a>
-    </div>
-    </div>
-  </div>
-</div>
-<section id="hero" class="d-flex align-items-center">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
-        <h1>Bike & Car Repair Service</h1>
-        <h2>Anytime & Anywhere in Nepal</h2>
-        <div class="d-flex justify-content-center justify-content-lg-start">
-          <a href="#about" class="btn-get-started scrollto">Register Shop</a>
+        <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="zoom-in" data-aos-delay="200">
+          <img src="{% static 'images/car.png' %}" class="img-fluid animated" alt="">
         </div>
-        <h2>sdfs</h2>
-        <div class="right-align">
-          <h5>24/7 Service</h5>
-          <a href="/accounts/registerShop/" class="btn btn-success">Register Shop</a>
       </div>
-      </div>
-      <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="zoom-in" data-aos-delay="200">
-        <img src="static/images/car.png" class="img-fluid animated" alt="">
-      </div>
-      
     </div>
-    
   </div>
+</section> {% endcomment %}
 
-</section>
 {% endblock content %}
