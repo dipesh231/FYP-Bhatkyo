@@ -78,7 +78,7 @@ class User(AbstractBaseUser):
         return user_role
     
 class UserProfile(models.Model):
-    user = OneToOneField(User, on_delete = models.CASCADE, blank = True, null = True)
+    user = models.OneToOneField(User, on_delete = models.CASCADE, blank = True, null = True)
     profile_picture = models.ImageField(upload_to='users/profile_pictures', blank=True, null=True)
     address = models.CharField(max_length = 50, blank = True, null = True)
     lattitude = models.CharField(max_length = 20, blank = True, null = True)

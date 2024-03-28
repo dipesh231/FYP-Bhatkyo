@@ -5,128 +5,127 @@
 {% block content %}
 <section class="ftco-section">
     <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-md-6 text-center mb-5">
-          <h2 class="heading-section">Register Shop</h2>
-        </div>
-      </div>
-      <div class="row justify-content-center">
-        <div class="col-md-12 col-lg-10">
-          <div class="wrap d-md-flex">
-            <div class="img" style="background-image: url('/static/images/hero_1.jpg');">
+        <div class="row justify-content-center">
+            <div class="col-md-6 text-center mb-5">
+                <h2 class="heading-section">Register Shop</h2>
             </div>
-            <div class="login-wrap p-4 p-md-5">
-              <div class="d-flex">
-                <div class="w-100">
-                  <h3 class="mb-4">Register Shop</h3>
-                </div>
-                <div class="w-100">
-                  <p class="social-media d-flex justify-content-end">
-                    <a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-facebook"></span></a>
-                    <a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-twitter"></span></a>
-                  </p>
-                </div>
-              </div>
-              <form action="{% url 'registerShop' %}" class="signin-form" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label class="label" for="name">Owner Name</label>
-                        <input type="text" class="form-control" id="id_name" name="name" placeholder="Name" required>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-12 col-lg-10">
+                <div class="wrap d-md-flex">
+                    <div class="img" style="background-image: url('/static/images/hero_1.jpg');">
                     </div>
-                    <div class="form-group col-md-6">
-                        <label class="label" for="email">Email</label>
-                        <input type="email" class="form-control" id="id_email" name="email" placeholder="Email" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label class="label" for="username">Username</label>
-                        <input type="text" class="form-control" id="id_username" name="username" placeholder="Username" required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="label" for="phone_number">Phone Number</label>
-                        <input type="tel" class="form-control" id="id_phone_number" name="phone_number" placeholder="Phone Number" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label class="label" for="shop_name">Shop Name</label>
-                        <input type="text" class="form-control" id="id_shop_name" name="shop_name" placeholder="Shop Name" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label class="label" for="password">Password</label>
-                        <input type="password" class="form-control" id="id_password" name="password" placeholder="Password" required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="label" for="confirm_password">Confirm Password</label>
-                        <input type="password" class="form-control" id="id_confirm_password" name="confirm_password" placeholder="Confirm Password" required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="label" for="shop_location">Address</label>
-                        <input type="text" class="form-control" id="id_shop_location" name="address" placeholder="Shop Location">
-                    </div>
-                        <div class="form-group col-md-6">
-                            <label class="label" for="vehicles">Vehicles</label><br>
-                            {% for value, label in vehicle_choices %}
-                                <input type="radio" id="{{ value }}" name="vehicles" value="{{ value }}">
-                                <label for="{{ value }}">{{ label }}</label><br>
-                            {% endfor %}
+                    <div class="login-wrap p-4 p-md-5">
+                        <div class="d-flex">
+                            <div class="w-100">
+                                <h3 class="mb-4">Register Shop</h3>
+                            </div>
+                            <div class="w-100">
+                                <p class="social-media d-flex justify-content-end">
+                                    <a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-facebook"></span></a>
+                                    <a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-twitter"></span></a>
+                                </p>
+                            </div>
                         </div>
-                    
-                    
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label class="label" for="profile_photo">Profile Photo</label>
-                        <input type="file" class="form-control-file" id="id_profile_photo" name="profile_photo" accept="image/*">
+                        <form action="{% url 'registerShop' %}" class="signin-form" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="label" for="name">Owner Name</label>
+                                    <input type="text" class="form-control" id="id_name" name="name" placeholder="Name" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="label" for="email">Email</label>
+                                    <input type="email" class="form-control" id="id_email" name="email" placeholder="Email" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="label" for="username">Username</label>
+                                    <input type="text" class="form-control" id="id_username" name="username" placeholder="Username" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="label" for="phone_number">Phone Number</label>
+                                    <input type="tel" class="form-control" id="id_phone_number" name="phone_number" placeholder="Phone Number" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="label" for="shop_name">Shop Name</label>
+                                    <input type="text" class="form-control" id="id_shop_name" name="shop_name" placeholder="Shop Name" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="label" for="password">Password</label>
+                                    <input type="password" class="form-control" id="id_password" name="password" placeholder="Password" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="label" for="confirm_password">Confirm Password</label>
+                                    <input type="password" class="form-control" id="id_confirm_password" name="confirm_password" placeholder="Confirm Password" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="label" for="shop_location">Address</label>
+                                    <input type="text" class="form-control" id="id_shop_location" name="address" placeholder="Shop Location">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="label" for="vehicles">Vehicles</label><br>
+                                    {% for value, label in vehicle_choices %}
+                                        <input type="radio" id="{{ value }}" name="vehicles" value="{{ value }}">
+                                        <label for="{{ value }}">{{ label }}</label><br>
+                                    {% endfor %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="label" for="profile_photo">Profile Photo</label>
+                                    <input type="file" class="form-control-file" id="id_profile_photo" name="profile_photo" accept="image/*">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="label" for="shop_lisence">Shop License</label>
+                                    <input type="file" class="form-control-file" id="id_shop_lisence" name="shop_lisence" accept="image/*">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="label" for="shop_location">Shop Location</label>
+                                    <input type="text" class="form-control" id="id_shop_location" name="shop_location" placeholder="Shop Location">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="label" for="services">Services</label>
+                                    <div class="checkbox-group">
+                                        {% for service in services %}
+                                            <input type="checkbox" id="service_{{ service.id }}" name="services" value="{{ service.id }}">
+                                            <label for="service_{{ service.id }}">{{ service.name }}</label><br>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Error list is placed inside the form -->
+                            <ul class="errorlist">
+                                {% for field in form %}
+                                    {% if field.errors %}
+                                        {% for error in field.errors %}
+                                            <li style="color: orange;">{{ error }}</li>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                                <li style="color: red;">{{ form.non_field_errors }}</li>
+                            </ul>
+                            <div class="form-group">
+                                <button type="submit" class="form-control btn1 btn-primary rounded submit px-3">Sign Up</button>
+                            </div>
+                            <div class="form-group">
+                                {% include 'includes/alerts.html' %}
+                            </div>
+                        </form>
+                        <p class="text-center">Already have an account? <a data-toggle="tab" href="{% url 'login' %}">Login</a></p>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label class="label" for="shop_lisence">Shop License</label>
-                        <input type="file" class="form-control-file" id="id_shop_lisence" name="shop_lisence" accept="image/*">
-                    </div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label class="label" for="shop_location">Shop Location</label>
-                        <input type="text" class="form-control" id="id_shop_location" name="shop_location" placeholder="Shop Location">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="label" for="services">Services</label>
-                        <div class="checkbox-group">
-                            {% for service in services %}
-                                <input type="checkbox" id="service_{{ service.id }}" name="services" value="{{ service.id }}">
-                                <label for="service_{{ service.id }}">{{ service.name }}</label><br>
-                            {% endfor %}
-                       </div>
-                    </div>
-                </div>
-                
-                <!-- Error list is placed inside the form -->
-                <ul class="errorlist">
-                    {% for field in form %}
-                        {% if field.errors %}
-                            {% for error in field.errors %}
-                                <li style="color: orange;">{{ error }}</li>
-                            {% endfor %}
-                        {% endif %}
-                    {% endfor %}
-                    <li style="color: red; class="text-decoration-none">{{form.non_field_errors}}</li>
-                </ul>
-                <div class="form-group">
-                    <button type="submit" class="form-control btn1 btn-primary rounded submit px-3">Sign Up</button>
-                </div>
-                <div class="form-group">
-                    {% include 'includes/alerts.html' %}
-                </div>
-            </form>             
-              <p class="text-center">Already an account? <a data-toggle="tab" href="{% url 'login' %}">Login</a></p>
             </div>
-          </div>
         </div>
-      </div>
     </div>
 </section>
-{% endblock content %} 
+{% endblock %}
