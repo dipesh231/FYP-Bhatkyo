@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'cart',
     'services',
     'bookings',
+    'customer'
 
 ]
 
@@ -75,6 +76,8 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'cart.context_processor.cart_total_amount',
                 'Accounts.context_processors.get_shop',
+                'Accounts.context_processors.get_user_profile',
+
             ],
         },
     },
@@ -137,6 +140,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static')
 ]
+
+GDAL_LIBRARY_PATH = '/path/to/your/gdal/library/libgdal.dll'
 
 # Media files configuration
 MEDIA_URL = '/media/'

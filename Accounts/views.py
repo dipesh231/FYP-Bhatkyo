@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from bookings.models import BookService
 from .utils import detectUser
@@ -143,3 +143,5 @@ def shopDashboard(request):
         'current_page': "Dashboard",
     }
     return render(request, 'accounts/shopDashboard.html', context)
+
+

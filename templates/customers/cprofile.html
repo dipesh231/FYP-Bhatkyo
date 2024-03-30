@@ -3,49 +3,61 @@
 {% block content %}
 
 {% include 'includes/alerts.html' %}
-{% include 'includes/cover.html' %}
+{% include 'customers/cover.html' %}
 <section id="services" class="services section-bg">
     <div class="container" data-aos="fade-up">
         <div class="page-section account-header buyer-logged-in">
             <div class="row">
                 <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                     <!-- Load the sidebar here -->
-                    {% include 'includes/s_sidebar.html' %}
+                    {% include 'includes/c_sidebar.html' %}
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
                     <div class="user-dashboard loader-holder">
                         <div class="user-holder">
-                            <h2>Manage Shop</h2>
-                            <form action="{% url 'sprofile' %}" method="POST" enctype="multipart/form-data">
+                            <h2 class = "uppercase" >Profile Settings</h2>
+                            <form action="{% url 'cprofile' %}" method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <div class="row">
                                     <!-- First Column -->
                                     <div class="col-lg-4 col-md-4">
                                         <div class="form-group">
-                                            <label class="label" for="id_shop_name">Shop Name</label>
-                                            <input type="text" class="form-control" id="id_shop_name" name="shop_name" placeholder="Shop Name" value="{{ shop_form.instance.shop_name }}" required>
+                                            <label class="label" for="id_shop_name">Name</label>
+                                            <input type="text" class="form-control" id="id_shop_name" name="name" placeholder="Name" value="{{ user_form.instance.name }}" required>
                                         </div>
                                     
                                         <div class="form-group">
-                                            <label class="label" for="id_address"> Shop Address</label>
-                                            <input type="text" class="form-control" id="id_address" name="address" placeholder="Address" value="{{ profile_form.instance.address }}">
+                                            <label class="label" for="id_shop_location"> Address</label>
+                                            <input type="text" class="form-control" id="id_shop_location" name="address" placeholder="Address" value="{{ profile_form.instance.address }}">
                                         </div>
                                             
-                                        <div class="form-group">
-                                            <label class="label" for="id_latitude"> Latitude</label>
-                                            <input type="text" class="form-control" id="id_latitude" name="latitude" placeholder="Latitude" value="{{ profile_form.instance.latitude }}">
-                                        </div>
-                                       
-                                        <div class="form-group">
-                                            <label class="label" for="id_longitude"> Longitude</label>
-                                            <input type="text" class="form-control" id="id_longitude" name="longitude" placeholder="Longitude" value="{{ profile_form.instance.longitude }}">
-                                        </div>
+                                            <div class="form-group">
+                                                <label class="label" for="id_shop_location">Phone</label>
+                                                <input type="text" class="form-control"  name="phone_number" placeholder="phone_number" value="{{ user_form.instance.phone_number }}">
+                                            </div>
                                     </div>
-                                    <div class="col-lg-8 col-md-8">
-                                        <div id="map" style="height: 300px;"></div>
-                                    </div>
-
                                     <div class="col-lg-4 col-md-4">
+
+                                    <div class="form-group">
+                                        <label class="label" for="id_shop_location"> Latitude</label>
+                                        <input type="text" class="form-control"  name="lattitude" placeholder="Address" value="{{ profile_form.instance.lattitude }}">
+                                    </div>
+                               
+                                <div class="form-group">
+                                    <label class="label" for="id_shop_location"> Longitude</label>
+                                    <input type="text" class="form-control" name="longitude" placeholder="Address" value="{{ profile_form.instance.longitude }}">
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4">
+                                <div class="form-group">
+                                    <label class="label" for="id_shop_image">Update profile Image</label><br>
+                                    <img src="{{ profile_form.instance.profile_picture.url }}" style="max-width: 100px; max-height: 100px;">
+
+                                    {{ profile_form.profile_picture }}
+                                </div><br>
+                            </div>
+
+                                    {% comment %} <div class="col-lg-4 col-md-4">
                                         <div class="form-group">
                                             <label class="label">Vehicles</label><br>
                                             {% for value, label in vehicle_choices %}
@@ -85,11 +97,11 @@
 
                                             {{ shop_form.shop_lisence }}
                                         </div>
-                                    </div>
+                                    </div> {% endcomment %}
                                 </div>
                                 <br>
                                 <div class="form-group">
-                                    <button type="submit" value = "Update Shop" class="btn1 btn-primary rounded submit px-9">Update Shop</button>
+                                    <button type="submit" value = "Update Profile" class="btn1 btn-primary rounded submit px-9">Update Profile</button>
                                 </div>
                             </form>
                         </div>
@@ -98,57 +110,5 @@
             </div>
         </div>
     </div>
-</section><!-- Include Leaflet JavaScript -->
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script>
-    // Initialize Leaflet map
-    document.addEventListener("DOMContentLoaded", function () {
-        var latitude = parseFloat('{{ profile_form.instance.latitude }}');
-        var longitude = parseFloat('{{ profile_form.instance.longitude }}');
-
-        var map = L.map('map').setView([latitude, longitude], 8); // Shop's coordinates and initial zoom level
-
-        // Add tile layer (you may use a different tile layer provider)
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-        // Add marker with drag and drop functionality
-        var marker = L.marker([latitude, longitude], { draggable: true }).addTo(map);
-
-        // Update marker position on dragend event
-        marker.on('dragend', function (event) {
-            var position = marker.getLatLng();
-            console.log('New marker position:', position.lat, position.lng);
-            // Update latitude and longitude fields with the new coordinates
-            document.getElementById('id_latitude').value = position.lat;
-            document.getElementById('id_longitude').value = position.lng;
-
-            // Perform reverse geocoding to fetch the address
-            fetchAddress(position.lat, position.lng);
-        });
-
-        // Update address and marker position when the user clicks on the map
-        map.on('click', function (e) {
-            marker.setLatLng(e.latlng);
-            document.getElementById('id_latitude').value = e.latlng.lat;
-            document.getElementById('id_longitude').value = e.latlng.lng;
-
-            // Perform reverse geocoding to fetch the address
-            fetchAddress(e.latlng.lat, e.latlng.lng);
-        });
-
-        // Function to perform reverse geocoding
-        function fetchAddress(latitude, longitude) {
-            fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('id_address').value = data.display_name;
-                })
-                .catch(error => {
-                    console.error('Error fetching address:', error);
-                });
-        }
-    });
-</script>
+</section>
 {% endblock %}

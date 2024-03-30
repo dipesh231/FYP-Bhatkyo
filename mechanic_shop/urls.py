@@ -4,4 +4,7 @@ from Accounts import views as AccountViews
 urlpatterns = [
     path('', AccountViews.shopDashboard, name="shop"), 
     path('profile/', views.Sprofile, name='sprofile'),
+    path('bookings/', views.Bookings, name='bookings'),
+
+    
 ]

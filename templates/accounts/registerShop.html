@@ -64,10 +64,6 @@
                                     <label class="label" for="confirm_password">Confirm Password</label>
                                     <input type="password" class="form-control" id="id_confirm_password" name="confirm_password" placeholder="Confirm Password" required>
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label class="label" for="shop_location">Address</label>
-                                    <input type="text" class="form-control" id="id_shop_location" name="address" placeholder="Shop Location">
-                                </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
@@ -87,9 +83,27 @@
                                     <label class="label" for="shop_lisence">Shop License</label>
                                     <input type="file" class="form-control-file" id="id_shop_lisence" name="shop_lisence" accept="image/*">
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label class="label" for="shop_location">Shop Location</label>
-                                    <input type="text" class="form-control" id="id_shop_location" name="shop_location" placeholder="Shop Location">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label class="label" for="address">Shop Address</label>
+                                        <input type="text" class="form-control" id="id_address" name="address" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label class="label" for="latitude">Latitude</label>
+                                        <input type="text" class="form-control" id="id_latitude" name="latitude" readonly>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="label" for="longitude">Longitude</label>
+                                        <input type="text" class="form-control" id="id_longitude" name="longitude" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label class="label" for="map">Pinpoint Address on Map</label>
+                                        <div id="map" style="height: 300px;"></div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-row">
@@ -128,4 +142,48 @@
         </div>
     </div>
 </section>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    var map = L.map('map').setView([28.3949, 84.124], 8); // Initial map view
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var marker = L.marker([28.3949, 84.124], { draggable: true }).addTo(map); // Initial marker
+
+    // Update latitude, longitude, and address fields when the marker is dragged
+    marker.on('dragend', function (event) {
+        var position = marker.getLatLng();
+        document.getElementById('id_latitude').value = position.lat;
+        document.getElementById('id_longitude').value = position.lng;
+
+        // Perform reverse geocoding to fetch the address
+        fetchAddress(position.lat, position.lng);
+    });
+
+    // Update marker position and address when the user clicks on the map
+    map.on('click', function (e) {
+        marker.setLatLng(e.latlng);
+        document.getElementById('id_latitude').value = e.latlng.lat;
+        document.getElementById('id_longitude').value = e.latlng.lng;
+
+        // Perform reverse geocoding to fetch the address
+        fetchAddress(e.latlng.lat, e.latlng.lng);
+    });
+
+    // Function to perform reverse geocoding
+    function fetchAddress(latitude, longitude) {
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('id_address').value = data.display_name;
+            })
+            .catch(error => {
+                console.error('Error fetching address:', error);
+            });
+    }
+</script>
+
 {% endblock %}

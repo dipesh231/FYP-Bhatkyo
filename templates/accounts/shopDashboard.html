@@ -2,45 +2,6 @@
 
 {% block content %}
 
-{% comment %} <main id="main">
-    <div class="product">
-        <div class="container-xl">
-            <div class="row">
-                <div class="col-md-12">
-            <h2><b>Bookings</b></h2>
-            <p>Voluptatem quibusdam ut ullam perferendis repellat non ut consequuntur est eveniet deleniti fignissimos eos quam</p>
-        </div>
-          <div class="row">
-            {% for booking in bookings %}
-            <div class="col-sm-3">
-            <li>
-                <strong>Customer:</strong> {{ booking.user.name }}<br>
-                <strong>Service:</strong> {{ booking.services.name }}<br>
-                <strong>Vehicle Type:</strong> {{ booking.vehicles }}<br>
-                <strong>Location:</strong> {{ booking.location }}<br>
-                <strong>Time:</strong> {{ booking.time }}<br>
-                <strong>Status</strong> {{ booking.status }}<br>
-                <strong>Problem Description:</strong> {{ booking.problem_description }}<br>
-                {% if booking.status not in 'Accepted,Rejected' %}
-                    <form method="post" action="{% url 'update_booking_status' %}">
-                        {% csrf_token %}
-                        <input type="hidden" name="booking_id" value="{{ booking.id }}">
-                        <select name="status" default="Pending">
-                            <option default="Pending" >Pending</option>
-                            <option value="Accepted">Accept</option>
-                            <option value="Rejected">Reject</option>
-                        </select>
-                        <button type="submit">Submit</button>
-                    </form>
-                {% endif %}
-                <hr>
-            </li>
-        </div>
-        {% endfor %}
-        </div>
-    </div>
-</div>
-</main> {% endcomment %}
 
 {% include 'includes/alerts.html' %}
 {% include 'includes/cover.html' %}

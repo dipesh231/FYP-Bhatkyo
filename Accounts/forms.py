@@ -5,11 +5,9 @@ from .models import User, UserProfile
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
     confirm_password = forms.CharField(widget=forms.PasswordInput())
-    address = forms.CharField(max_length = 50)
-    profile_photo = forms.ImageField(required=False) 
     class Meta:
         model = User
-        fields = ['name', 'username', 'email', 'phone_number', 'password', 'address', 'profile_photo']
+        fields = ['name', 'username', 'email', 'phone_number', 'password']
 
     def clean(self):
         cleaned_data = super(UserForm, self).clean()
@@ -26,5 +24,10 @@ class UserProfileForm(forms.ModelForm):
     
     class Meta:
         model = UserProfile
-        fields = ['profile_picture', 'address', 'lattitude', 'longitude']
+        fields = ['profile_picture', 'address', 'latitude', 'longitude']
+
+class UserInfoForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['name', 'phone_number']
                 

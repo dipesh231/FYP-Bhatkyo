@@ -10,7 +10,7 @@ urlpatterns = [
     path('myAccount/', views.myAccount, name='myAccount'),
     path('customerDashboard/', views.customerDashboard, name='customerDashboard'),
     path('shopDashboard/', views.shopDashboard, name='shopDashboard'),
-
-    path('mechanicShop/', include('mechanic_shop.urls'))
+    path('mechanicShop/', include('mechanic_shop.urls')),
+    path('customer/', include('customer.urls')),
 
 ]

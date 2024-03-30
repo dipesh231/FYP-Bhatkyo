@@ -1,0 +1,15 @@
+<!-- search_results.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Search Results</h2>
+{% if nearby_shops %}
+    <ul>
+    {% for shop in nearby_shops %}
+        <li>{{ shop.shop_name }} - Distance: {{ shop.distance|default:"Not available" }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No shops found within the specified distance and services.</p>
+{% endif %}
+{% endblock %}

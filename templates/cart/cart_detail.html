@@ -57,29 +57,11 @@
             <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
                 <div class="col">TOTAL PRICE : Rs. {{cart_total_amount}}</div>
             </div>
-            <button id="checkout-button" class="btn">CHECKOUT</button>
+            <a href={% url "init" %} ><button id="checkout-button" class="btn">CHECKOUT</button></a>
         </div>
     </div>
     
 </div>
 
-<script>
-    document.getElementById('checkout-button').addEventListener('click', function() {
-        // Fetch the sessionId from the backend
-        fetch('../../checkout/')
-            .then(function(response) {
-                return response.json();
-            })
-            .then(function(session) {
-                // Redirect to Stripe checkout page
-                stripe.redirectToCheckout({
-                    sessionId: session.sessionId
-                });
-            })
-            .catch(function(error) {
-                console.error('Error:', error);
-            });
-    });
-</script>
 
 {% endblock content %}

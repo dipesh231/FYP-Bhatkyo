@@ -32,9 +32,6 @@ class Shop(models.Model):
         ('both', 'Both'),
     )
     vehicles = models.CharField(max_length=100, choices=vehicle_choices)
-    shop_location = models.CharField(max_length=100)
-    latitude = models.CharField(max_length = 20, null=True, blank=True)
-    longitude = models.CharField(max_length = 20, null=True, blank=True)
     is_approved = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)

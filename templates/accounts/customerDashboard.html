@@ -18,6 +18,8 @@
             <strong>Location:</strong> {{ booking.location }}<br>
             <strong>Time:</strong> {{ booking.time }}<br>
             <strong>Problem Description:</strong> {{ booking.problem_description }}<br>
+            <strong>Feedback:</strong> {{ booking.feedback }}<br>
+
             <a href = "{% url 'rate_shop' booking.id %}">Review</a> <br>
 
             <hr>
@@ -25,9 +27,9 @@
     {% endfor %}
           </div>
     </div>
-</section> {% endcomment %}
+</section>  {% endcomment %}
 {% include 'includes/alerts.html' %}
-{% include 'includes/cover.html' %}
+{% include 'customers/cover.html' %}
 
 <section id="services" class="services section-bg">
     {% comment %} {% include 'includes/cover.html' %} {% endcomment %}

@@ -13,24 +13,18 @@
     <nav id="navbar" class="navbar">
       <ul>
         <li><a href="{% url 'index' %}" class="active">Home</a></li>
-        <li><a href="footer.html">About</a></li>
-        <li><a href="services.html">Services</a></li>
-        <li><a href="projects.html">Projects</a></li>
-        <li><a href="blog.html">Blog</a></li>
-        <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+        <li class="dropdown"><a href="#"><span>Services</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
           <ul>
-            <li><a href="#">Dropdown 1</a></li>
-            <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
-              <ul>
-                <li><a href="#">Deep Dropdown 1</a></li>
-                <li><a href="#">Deep Dropdown 2</a></li>
-                <li><a href="#">Deep Dropdown 3</a></li>
-                <li><a href="#">Deep Dropdown 4</a></li>
-                <li><a href="#">Deep Dropdown 5</a></li>
-              </ul>
-            </li>
+            <li><a href="#">Towing</a></li>
+            <li><a href="#">Flat-Tyre</a></li>
+            <li><a href="#">Fuel-Delivery</a></li>
+            <li><a href="#">Battery-Jumpstart</a></li>
+            <li><a href="#">Key-Unlock-Assistance</a></li>
+            <li><a href="#">Starting Problem</a></li>
           </ul>
         </li>
+        <li><a href="projects.html">Products</a></li>
+        <li><a href="blog.html">About Us</a></li>
         <li><a href="contact.html">Contact</a></li>
         <li><a href="{% url 'cart_detail' %}" class="cart-icon" class="count" {{request.session.cart|length}}><i class="bi bi-cart3" style="font-size: 24px;"></i></a></li>
         {% if user.is_authenticated %}

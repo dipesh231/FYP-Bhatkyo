@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="post" action="{% url 'search_shops' %}">
+    {% csrf_token %}
+    <label for="location">Your Location:</label><br>
+    <input type="text" id="location" name="location" placeholder="Enter your location"><br>
+
+    <!-- Map Element -->
+    <div id="map" style="height: 400px;"></div><br>
+
+    <label for="distance">Search Distance (in km):</label><br>
+    <input type="number" id="distance" name="distance" value="10"><br>
+
+    <label for="services">Select Services:</label><br>
+    {% for service in services %}
+        <input type="checkbox" id="service_{{ service.id }}" name="services" value="{{ service.id }}">
+        <label for="service_{{ service.id }}">{{ service.name }}</label><br>
+    {% endfor %}
+
+    <button type="submit">Search</button>
+</form>
+
+<!-- Include Leaflet library -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<!-- JavaScript to initialize map -->
+<script>
+    var map = L.map('map').setView([28.3949, 84.124], 8); // Initial map view
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var marker = L.marker([28.3949, 84.124], { draggable: true }).addTo(map); // Initial marker
+
+    // Update latitude, longitude fields when the marker is dragged
+    marker.on('dragend', function (event) {
+        var position = marker.getLatLng();
+        document.getElementById('latitude').value = position.lat;
+        document.getElementById('longitude').value = position.lng;
+    });
+
+    // Update marker position when the user clicks on the map
+    map.on('click', function (e) {
+        marker.setLatLng(e.latlng);
+        document.getElementById('latitude').value = e.latlng.lat;
+        document.getElementById('longitude').value = e.latlng.lng;
+    });
+</script>
+{% endblock %}

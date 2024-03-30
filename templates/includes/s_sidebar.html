@@ -2,15 +2,18 @@
 <div class="user-sidebar">
   <nav id="navbar2" class="navbar">
       <ul>
-          <li class = "{% if '/accounts/shopDashboard/' == request.path or '/accounts/mechanicShop/' == request.path %} active {% endif %}"><a href="{% url 'shopDashboard' %}" class="active">Dashboard</a></li>
-          <li class = "{% if 'profile' in request.path %}active{% endif %}"><a href="{% url 'sprofile' %}">My Shop</a></li>
-          <li><a href="about.html">Bookings</a></li>
+          <li class="{% if '/accounts/shopDashboard/' == request.path or '/accounts/mechanicShop/' == request.path %}active{% endif %}">
+              <a href="{% url 'shopDashboard' %}" class="active">Dashboard</a>
+          </li>
+          <li class="{% if 'profile' in request.path %}active{% endif %}">
+              <a href="{% url 'sprofile' %}">My Shop</a>
+          </li>
+          <li class="{% if 'bookings' in request.path %}active{% endif %}">
+              <a href="{% url 'bookings' %}">Bookings</a>
+          </li>
           <li><a href="projects.html">Orders</a></li>
           <li><a href="blog.html">Change Password</a></li>
-          <li><a href="{% url 'logout' %}" class="btn btn-danger ml-3">Logout</span></a></li>
-          
+          <li><a href="{% url 'logout' %}" class="btn btn-danger ml-3">Logout</a></li>
       </ul>
   </nav>
 </div>
-
-

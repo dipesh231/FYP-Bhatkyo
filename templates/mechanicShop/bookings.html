@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+{% include 'includes/alerts.html' %}
+{% include 'includes/cover.html' %}
+
+<section id="blog" class="blog">
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="page-section account-header buyer-logged-in">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                    <!-- Load the sidebar here -->
+                    {% include 'includes/s_sidebar.html' %}
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                    <div class="user-dashboard loader-holder">
+                        <div class="user-holder">
+                            <h2>Manage Shop</h2>
+                            <div class="row gy-4 posts-list">
+                                {% for booking in bookings %}
+                                    <div class="col-xl-5"> <!-- Adjusted to have two columns per row -->
+                                        <div class="post-item position-relative h-100">
+                                            <div class="post-img position-relative overflow-hidden">
+                                                <img src="{{ booking.services.service_picture.url }}" class="img-fluid" alt="{{ booking.services.name }}">
+                                                <span class="post-date">{{ booking.time }}</span>
+                                            </div>
+                                            <div class="post-content d-flex flex-column">
+                                                <h3 class="post-title">{{ booking.services.name }}</h3>
+                                                <div class="meta d-flex align-items-center">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="bi bi-person"></i> <span class="ps-2">{{ booking.user.name }}</span>
+                                                    </div>
+                                                    <span class="px-3 text-black-50">/</span>
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="bi bi-folder2"></i> <span class="ps-2">{{ booking.vehicles }}</span>
+                                                    </div>
+                                                    <span class="px-3 text-black-50">/</span>
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="bi bi-folder2"></i> <span class="ps-2">{{ booking.status }}</span>
+                                                    </div>
+                                                </div>
+                                                <p>{{ booking.problem_description }}</p>
+                                                <hr>
+                                                {% if booking.status not in 'Accepted,Rejected' %}
+                                                    <form method="post" action="{% url 'update_booking_status' %}">
+                                                        {% csrf_token %}
+                                                        <div class="col form-group">
+                                                            <input name="feedback" type="text" class="form-control" placeholder="Enter feedback *"><br>
+                                                        </div>
+                                                        <div class="col form-group">
+                                                            <input type="hidden" name="booking_id" value="{{ booking.id }}">
+                                                            <select name="status">
+                                                                <option value="Pending">Pending</option>
+                                                                <option value="Accepted">Accept</option>
+                                                                <option value="Rejected">Reject</option>
+                                                            </select>
+                                                        </div>
+                                                        <button type="submit">Submit</button>
+                                                    </form>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
