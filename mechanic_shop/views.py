@@ -6,7 +6,7 @@ from Accounts.forms import UserForm, UserProfileForm
 from Accounts.models import User, UserProfile
 from Accounts.views import check_role_shop
 from bookings.models import BookService
-from mechanic_shop.forms import ShopForm
+from mechanic_shop.forms import  ShopForm
 from mechanic_shop.models import Service, Shop
 @login_required(login_url='login')
 @user_passes_test(check_role_shop)
@@ -71,3 +71,15 @@ def Bookings(request):
         'current_page': "Bookings",
     }
     return render(request, 'mechanicShop/bookings.html', context)
+@login_required(login_url='login')
+@user_passes_test(check_role_shop)
+def delete_booking(request, booking_id):
+    if request.method == 'POST':
+        booking = get_object_or_404(BookService, id=booking_id)
+        booking.delete()
+        messages.success(request, 'Booking deleted successfully.')
+    return redirect('bookings')
+
+def booking_details(request, booking_id):
+    booking = get_object_or_404(BookService, id=booking_id)
+    return render(request, 'mechanicShop/booking_details.html', {'booking': booking})

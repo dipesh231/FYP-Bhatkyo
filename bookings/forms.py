@@ -1,18 +1,30 @@
-# forms.py
-
 from django import forms
 from .models import BookService
 
 class BookServiceForm(forms.ModelForm):
+    location = forms.CharField(label='Location', required=True)  # Add location field
+
     class Meta:
         model = BookService
-        fields = ['services', 'vehicles', 'problem_description','location','time']
+        fields = ['vehicles', 'problem_description', 'date', 'location']  # Include location field
         widgets = {
             'user_id': forms.HiddenInput(),
-            'shop_name': forms.TextInput(attrs={'readonly': 'readonly'})
+            'shop_name': forms.TextInput(attrs={'readonly': 'readonly'}),
+            'latitude': forms.HiddenInput(),
+            'longitude': forms.HiddenInput(),
+            'services': forms.HiddenInput(),
         }
 
-    def __init__(self, shop, *args, **kwargs):
+    def __init__(self, shop, location=None, latitude=None, longitude=None, selected_service=None, *args, **kwargs):
         super(BookServiceForm, self).__init__(*args, **kwargs)
-        self.fields['services'].queryset = shop.services.all()
+        self.fields['vehicles'].queryset = shop.vehicle_choices
         self.initial['shop'] = shop
+        self.initial['latitude'] = latitude
+        self.initial['location'] = location
+        self.initial['longitude'] = longitude
+
+        if selected_service and selected_service in shop.services.all():
+            self.initial['services'] = selected_service
+        else:
+            self.initial['services'] = None  # Reset the selected service if it doesn't belong to the shop
+

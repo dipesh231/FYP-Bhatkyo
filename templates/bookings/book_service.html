@@ -1,54 +1,137 @@
 {% extends 'base.html' %}
-
 {% load static %}
 
 {% block content %}
-    <style>
-        
-        h1 {
-            text-align: center;
-            margin-top: 50px;
-        }
-        form {
-            width: 80%;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        input[type="text"],
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        button[type="submit"] {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: #fff;
-            cursor: pointer;
-        }
-        button[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-    </style>
-<div class="productDes">
-    <h1>Book Service</h1>
-    <form method="post">
-        {% csrf_token %}
-        <input type="" name="user" value="{{ user.email }}" placeholder="User Email" required>
-        <input type="" name="shop_name" value="{{ shop.shop_name }}" placeholder="Shop Name" required>
-        {{ form.as_p }}
-        <button type="submit">Book Service</button>
+{% include 'customers/cover.html' %}
+<section id="blog" class="blog">
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <h1>Book Service</h1>
+        <div class="row">
+            <!-- Form column -->
+            <div class="col-md-6">
+                <form action="{% url 'book_service' shop_id=shop.id %}" class="signin-form" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label class="label" for="service">Name</label>
+                        <input type="text" class="form-control" name="user_name" value="{{ user.name }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="label" for="service">Shop Name</label>
+                        <input type="text" class="form-control" name="shop_name" value="{{ shop.shop_name }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="label" for="services">Services</label>
+                        <input type="text" class="form-control" value="{{ selected_service.name }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="label" for="vehicles">Vehicles</label><br>
+                        {% for value, label in shop.vehicle_choices %}
+                            <input type="radio" id="{{ value }}" name="vehicles" value="{{ value }}">
+                            <label for="{{ value }}">{{ label }}</label><br>
+                        {% endfor %}
+                    </div>
+                    <div class="form-group">
+                        <label class="label" for="problem_description">Problem Description</label>
+                        <textarea class="form-control" id="id_problem_description" name="problem_description" placeholder="Problem Description" required></textarea>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="label" for="date">Date</label>
+                        <input type="datetime-local" class="form-control" id="id_date" name="date">
+                    </div>
+                </div>
+            <!-- Map column -->
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="label" for="location">Location</label>
+                    <input type="text" class="form-control" id="id_location" name="location" placeholder="Location" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="label" for="latitude">Latitude</label>
+                    <input type="text" class="form-control" id="id_latitude" name="latitude" placeholder="Latitude" value="{{ request.session.latitude }}" required>
+                </div>
+                <div class="form-group">
+                    <label class="label" for="longitude">Longitude</label>
+                    <input type="text" class="form-control" id="id_longitude" name="longitude" placeholder="Longitude" value="{{ request.session.longitude }}" required>
+                </div>
+                <div id="map" style="height: 300px;"></div>
+            </div>
+        </div>
+    
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary rounded submit px-3">Book Service</button>
+    </div>
     </form>
 </div>
+    <div class="form-group">
+        {% include 'includes/alerts.html' %}
+    </div>
+</section>
+<!-- Include Leaflet JavaScript -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Function to perform reverse geocoding and update address field
+        function fetchAddress(latitude, longitude) {
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`)
+                .then(response => response.json())
+                .then(data => {
+                    const locationInput = document.getElementById('id_location');
+                    locationInput.value = data.display_name;
+                })
+                .catch(error => {
+                    console.error('Error fetching address:', error);
+                });
+        }
+    
+        // Get latitude and longitude from the form fields
+        const latitude = parseFloat(document.getElementById('id_latitude').value);
+        const longitude = parseFloat(document.getElementById('id_longitude').value);
+    
+        // Initialize map
+        var map = L.map('map').setView([latitude, longitude], 13); // Set initial map view
+    
+        // Add tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+    
+        // Add marker
+        L.marker([latitude, longitude]).addTo(map)
+            .bindPopup('Your location')
+            .openPopup();
+    
+        // Update the address field using reverse geocoding
+        fetchAddress(latitude, longitude);
+    
+        // Event listener for map click
+        map.on('click', function(e) {
+            const latitude = e.latlng.lat;
+            const longitude = e.latlng.lng;
+    
+            // Update latitude and longitude fields
+            document.getElementById('id_latitude').value = latitude;
+            document.getElementById('id_longitude').value = longitude;
+    
+            // Update the location field using reverse geocoding
+            fetchAddress(latitude, longitude);
+        });
+    
+        // Event listener for form submission
+        const form = document.querySelector('form.signin-form');
+        form.addEventListener('submit', function(event) {
+            const latitude = parseFloat(document.getElementById('id_latitude').value);
+            const longitude = parseFloat(document.getElementById('id_longitude').value);
+            
+            // Update the location field using reverse geocoding before form submission
+            fetchAddress(latitude, longitude);
+    
+            // Disable form submission if location is not filled in yet
+            if (!document.getElementById('id_location').value.trim()) {
+                event.preventDefault();
+                alert('Please select a location on the map.');
+            }
+        });
+    });
+</script>
 {% endblock %}

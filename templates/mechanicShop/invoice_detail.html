@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% include 'includes/alerts.html' %}
+    {% include 'includes/cover.html' %}
+
+    <section id="blog" class="blog">
+        <div class="container" data-aos="fade-up" data-aos-delay="100">
+            <div class="page-section account-header buyer-logged-in">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <!-- Load the sidebar here -->
+                        {% include 'includes/s_sidebar.html' %}
+                    </div>
+                    <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                        <div class="user-dashboard loader-holder">
+                            <div class="user-holder">
+                                <h2>Invoice Details</h2>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3 class="card-title">Invoice Information</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="form-group">
+                                                    <label class="label">User:</label>
+                                                    <input type="text" class="form-control" value="{{ invoice.booking.user.name }}" readonly>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="label">Shop:</label>
+                                                    <input type="text" class="form-control" value="{{ invoice.booking.shop.shop_name }}" readonly>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="label">Service:</label>
+                                                    <input type="text" class="form-control" value="{{ invoice.booking.services.name }}" readonly>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="label">Hours:</label>
+                                                    <input type="text" class="form-control" value="{{ invoice.service_hours }}" readonly>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="label">Total Price:</label>
+                                                    <input type="text" class="form-control" value="{{ invoice.total_amount }}" readonly>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="label">Product Used:</label>
+                                                    <input type="text" class="form-control" value="{{ invoice.product.product_name }}" readonly>
+                                                </div>
+                                                
+                                                <div class="form-group">
+                                                    <label class="label">Created At:</label>
+                                                    <input type="text" class="form-control" value="{{ invoice.created_at }}" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

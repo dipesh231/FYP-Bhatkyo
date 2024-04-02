@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'includes/alerts.html' %}
+{% include 'includes/cover.html' %}
+
+<section id="blog" class="blog">
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="page-section account-header buyer-logged-in">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                    <!-- Load the sidebar here -->
+                    {% include 'includes/s_sidebar.html' %}
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                    <div class="user-dashboard loader-holder">
+                        <div class="user-holder">
+                            <h2>Manage Booking</h2>
+                            <div class="row">
+                                <!-- Booking details column -->
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Booking Details</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label class="label">Name:</label>
+                                                <input type="text" class="form-control" value="{{ user.name }}" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="label">Shop Name:</label>
+                                                <input type="text" class="form-control" value="{{ shop.shop_name }}" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="label">Services:</label>
+                                                <input type="text" class="form-control" value="{{ booking.services.name }}" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="label">Vehicles:</label>
+                                                {% for value, label in shop.vehicle_choices %}
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" id="{{ value }}" name="vehicles" value="{{ value }}" {% if value == booking.vehicles %} checked {% endif %}>
+                                                        <label class="form-check-label" for="{{ value }}">{{ label }}</label>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>                                            
+                                            
+                                            <div class="form-group">
+                                                <label class="label">Problem Description:</label>
+                                                <textarea class="form-control" readonly>{{ booking.problem_description }}</textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="label">Date:</label>
+                                                <input type="text" class="form-control" value="{{ booking.date }}" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="label">Booking Status</label>
+                                                <input type="text" class="form-control" value="{{ booking.status }}" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Map column -->
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Location</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label class="label">Location:</label>
+                                                <input type="text" class="form-control" value="{{ booking.location }}" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="label">Latitude:</label>
+                                                <input type="text" class="form-control" value="{{ booking.latitude }}" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="label">Longitude:</label>
+                                                <input type="text" class="form-control" value="{{ booking.longitude }}" readonly>
+                                            </div>
+                                            <div id="map" style="height: 300px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if booking.status not in 'Accepted,Rejected' %}
+                                <form method="post" action="{% url 'update_booking_status' %}">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <input name="feedback" type="text" class="form-control" placeholder="Enter feedback">
+                                    </div><br>
+                                    <div class="form-group">
+                                        <input type="hidden" name="booking_id" value="{{ booking.id }}">
+                                        <select name="status" class="form-control">
+                                            <option value="Pending">Pending</option>
+                                            <option value="Accepted">Accept</option>
+                                            <option value="Rejected">Reject</option>
+                                        </select>
+                                    </div><br>
+                        
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                            {% else %}
+                            <div class="row">
+                                <div class="col-md-6 mt-3">
+                                    <form method="post" action="{% url 'delete_booking' booking.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                                {% if booking.invoice %}
+                                <div class="col-md-6 mt-3">
+                                    <a href="{% url 'invoice_detail' booking.invoice.id %}" class="btn btn-primary">View Invoice</a>
+                                </div>
+                            {% else %}
+                                <div class="col-md-6 mt-3">
+                                    <a href="{% url 'create_invoice' booking.id %}" class="btn btn-success">Create Invoice</a>
+                                </div>
+                            {% endif %}
+                            
+                            </div>
+                            
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Include Leaflet JavaScript -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get latitude and longitude from the booking data
+        const latitude = parseFloat("{{ booking.latitude }}");
+        const longitude = parseFloat("{{ booking.longitude }}");
+
+        // Initialize map
+        var map = L.map('map').setView([latitude, longitude], 13); // Set initial map view
+
+        // Add tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Add marker
+        L.marker([latitude, longitude]).addTo(map)
+            .bindPopup('Booking Location')
+            .openPopup();
+    });
+</script>
+{% endblock %}

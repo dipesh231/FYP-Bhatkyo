@@ -3,7 +3,7 @@
   <nav id="navbar2" class="navbar">
       <ul>
           <li class = "{% if '/customerDashboard/' == request.path or '/customer/' == request.path %} active {% endif %}"><a href="{% url 'customer' %}" class="active">Dashboard</a></li>
-          <li><a href="about.html" >My Bookings</a></li>
+          <li class="{% if 'myBookings' in request.path %}active{% endif %}"><a href="{% url 'myBookings' %}" >My Bookings</a></li>
           <li class="{% if 'profile' in request.path %}active{% endif %}">
             <a href="{% url 'cprofile' %}">Profile</a>
           </li>

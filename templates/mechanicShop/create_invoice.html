@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'includes/alerts.html' %}
+{% include 'includes/cover.html' %}
+
+<section id="blog" class="blog">
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="page-section account-header buyer-logged-in">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                    <!-- Load the sidebar here -->
+                    {% include 'includes/s_sidebar.html' %}
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                    <div class="user-dashboard loader-holder">
+                        <div class="user-holder">
+                            <h2 class="mb-4">Create Invoice</h2>
+                            <form method="post" action="" class="needs-validation" novalidate>
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="booking_id" class="form-label">Booking ID</label>
+                                    <p class="form-control-plaintext">{{ booking.id }}</p>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="service_name" class="form-label">Service Name</label>
+                                    <p class="form-control-plaintext">{{ booking.services.name }}</p>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="service_hours" class="form-label">Service Hours Used</label>
+                                    <input type="number" class="form-control" id="service_hours" name="service_hours" required>
+                                    <div class="invalid-feedback">
+                                        Please enter the service hours.
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="products" class="form-label">Select Product(s)</label>
+                                    <select name="products" id="products" class="form-select" multiple>
+                                        {% for product in products %}
+                                            <option value="{{ product.id }}" data-price="{{ product.price }}">{{ product.product_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div id="product_quantities_wrapper" class="product-quantities-wrapper row" style="display: none;">
+                                    {% for product in products %}
+                                        <div class="col-md-6">
+                                            <label for="product_{{ product.id }}_quantity" class="product-quantity-label" style="display: none;">Quantity for {{ product.product_name }}:</label>
+                                            <input type="number" name="product_quantities" id="product_{{ product.id }}_quantity" class="form-control product-quantity-input" style="display: none;">
+                                        </div>
+                                    {% endfor %}
+                                </div><br>
+                                <button type="button" class="btn btn-primary mb-3" id="calculate_total">Calculate Total</button>
+                                <div class="mb-3">
+                                    <label for="service_total" class="form-label">Service Total</label>
+                                    <p id="service_total" class="form-control-plaintext"></p>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="product_total" class="form-label">Product Total</label>
+                                    <p id="product_total" class="form-control-plaintext"></p>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="grand_total" class="form-label">Grand Total</label>
+                                    <p id="grand_total" class="form-control-plaintext"></p>
+                                </div>
+                                <input type="hidden" name="total_amount" id="total_amount_input">
+                                <button type="submit" class="btn btn-success">Generate Invoice</button>
+                            </form>
+                            <script>
+                                document.getElementById('calculate_total').addEventListener('click', function() {
+                                    const serviceHours = parseFloat(document.getElementById('service_hours').value);
+                                    const productQuantities = Array.from(document.querySelectorAll('.product-quantity-input')).map(input => parseFloat(input.value));
+                                    const servicePrice = parseFloat("{{ booking.services.price }}");
+                                    const serviceTotal = servicePrice * serviceHours;
+                                    document.getElementById('service_total').innerText = serviceTotal.toFixed(2);
+                                    let productTotal = 0;
+                                    const products = document.getElementById('products');
+                                    for (let i = 0; i < products.options.length; i++) {
+                                        const productId = products.options[i].value;
+                                        const productPrice = parseFloat(products.options[i].getAttribute('data-price'));
+                                        const productQuantity = productQuantities[i] || 0;
+                                        productTotal += productPrice * productQuantity;
+                                    }
+                                    document.getElementById('product_total').innerText = productTotal.toFixed(2);
+                                    const grandTotal = serviceTotal + productTotal;
+                                    document.getElementById('grand_total').innerText = grandTotal.toFixed(2);
+                                    document.getElementById('total_amount_input').value = grandTotal.toFixed(2);
+                                });
+
+                                document.getElementById('products').addEventListener('change', function() {
+                                    const selectedProducts = Array.from(this.selectedOptions).map(option => option.value);
+                                    const productQuantitiesWrapper = document.getElementById('product_quantities_wrapper');
+
+                                    if (selectedProducts.length > 0) {
+                                        productQuantitiesWrapper.style.display = 'block';
+                                        selectedProducts.forEach(productId => {
+                                            const quantityLabel = document.querySelector(`label[for="product_${productId}_quantity"]`);
+                                            const quantityInput = document.getElementById(`product_${productId}_quantity`);
+
+                                            quantityLabel.style.display = 'block';
+                                            quantityInput.style.display = 'block';
+                                        });
+                                    } else {
+                                        productQuantitiesWrapper.style.display = 'none';
+                                        document.querySelectorAll('.product-quantity-label').forEach(label => {
+                                            label.style.display = 'none';
+                                        });
+                                        document.querySelectorAll('.product-quantity-input').forEach(input => {
+                                            input.style.display = 'none';
+                                        });
+                                    }
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

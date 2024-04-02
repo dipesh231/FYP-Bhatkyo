@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+{% include 'includes/alerts.html' %}
+{% include 'customers/cover.html' %}
+
+<section id="blog" class="blog">
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="page-section account-header buyer-logged-in">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                    <!-- Load the sidebar here -->
+                    {% include 'includes/c_sidebar.html' %}
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                    <div class="user-dashboard loader-holder">
+                        <div class="user-holder">
+                            <h2>My Bookings</h2>
+                            <div class="row gy-4 posts-list">
+                                {% for booking in bookings %}
+                                    <div class="col-xl-5"> <!-- Adjusted to have two columns per row -->
+                                        <div class="post-item position-relative h-100">
+                                            <div class="post-content d-flex flex-column">
+                                                <h3 class="post-title">Shop Name: {{ booking.shop.shop_name }}</h3>
+                                                <p><strong>Service:</strong> {{ booking.services.name }}</p>
+                                                <p><strong>Vehicle Type:</strong> {{ booking.vehicles }}</p>
+                                                <p><strong>Status:</strong> {{ booking.status }}</p>
+                                                <p><strong>Location:</strong> {{ booking.location }}</p>
+                                                <p><strong>Time:</strong> {{ booking.date }}</p>
+                                                <p><strong>Problem Description:</strong> {{ booking.problem_description }}</p>
+                                                <p><strong>Feedback:</strong> {{ booking.feedback }}</p>
+                                                <a href="{% url 'rate_shop' booking.id %}">Review</a>
+                                                <hr>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

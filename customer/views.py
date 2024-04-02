@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from Accounts.forms import UserInfoForm, UserProfileForm
 from Accounts.models import UserProfile
 from Accounts.views import check_role_customer
+from bookings.models import BookService
 
 # Create your views here.
 
@@ -32,3 +33,14 @@ def Cprofile(request):
         'profile': profile,
     }
     return render(request, 'customers/cprofile.html', context)
+
+
+@login_required(login_url='login')
+@user_passes_test(check_role_customer)
+def myBookings(request):
+    bookings = BookService.objects.filter(user=request.user)
+    context = {
+        'bookings': bookings,
+        'current_page': "Bookings",
+    }
+    return render(request, 'customers/myBookings.html', context)

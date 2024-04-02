@@ -80,7 +80,7 @@ def initkhalti(request):
         "purchase_order_id": purchase_order_id,
         "purchase_order_name": "hlo",
         "customer_info": {
-            "name": "Bibek Dahal",
+            "name": "{user.name}",
             "email": "test@khalti.com",
             "phone": "9800000001"
         }
@@ -123,7 +123,8 @@ def verifyKhalti(request):
 
         if new_res['status'] == 'Completed':
            print("Payment completed successfully!")  # Print message in terminal
-
+           cart = Cart(request)
+           cart.clear()
             # If you want to display a message to the user, you can redirect to a page
             # or return an HTTP response with a message
         return HttpResponse("Payment completed successfully!")

@@ -4,5 +4,7 @@ from Accounts import views as AccountViews
 urlpatterns = [
     path('', AccountViews.customerDashboard, name = 'customer'),
     path('profile/', views.Cprofile, name='cprofile'),
+    path('myBookings/', views.myBookings, name='myBookings'),
+
 
 ]    

@@ -12,12 +12,14 @@
           <h1 style=" font-size:55px; color: white">Bike & Car Repair Service</h1>
           <h1 style="font-size:45px; color: white;">Anytime & Anywhere in Nepal</h1>
           <div class="d-flex justify-content-center justify-content-lg-start">
-            <a href="#about" class="btn-get-started">Book a Service</a>
+            <a href="{% url 'pinpoint_address' %}" class="btn-get-started">Book a Service</a>
           </div>
           <h5 style="font-size:45px; color: white;">sdfs</h5>
           <div class="right-align">
             <h5 style="font-size:25px; color: white;">24/7 Service</h5>
+            {% if not user.is_authenticated %}
             <a href="{% url 'registerUser' %}" class="btn btn-success"  style="margin-left:300px;">Sign Up</a>
+            {% endif %}
           </div>
         </div>
         <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="" data-aos-delay="200">
@@ -76,7 +78,7 @@
         </div>
     </section>
 
-<div class="product">
+{% comment %} <div class="product">
   <div class="container-xl">
       <div class="row">
           <div class="col-md-12">
@@ -127,8 +129,8 @@
           </div>
       </div>
   </div>
-</div>
-<div class="product">
+</div> {% endcomment %}
+<section id="services" class="services section-bg">
   <div class="container-xl">
       <div class="row">
           <div class="col-md-12">
@@ -173,7 +175,7 @@
           </div>
       </div>
   </div>
-</div>
+</section>
 {% comment %} <section id="services" class="services section-bg">
   <div class="info d-flex align-items-center">
     <div class="container">

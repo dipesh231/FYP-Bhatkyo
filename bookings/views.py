@@ -1,61 +1,95 @@
+from decimal import Decimal
+import math
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
-from .models import RateBooking, Shop, BookService
+from django.urls import reverse
+from products.models import Product
+from .models import Invoice, InvoiceProduct, RateBooking, BookService
 from .forms import BookServiceForm
-from django.contrib.gis.geos import Point
-from django.contrib.gis.measure import Distance
-# from django.contrib.gis.geos import Point
 from django.shortcuts import render
-from .models import Shop, Service
+from mechanic_shop.models import Service, Shop
+from django.db.models import F
+from django.contrib import messages
 
-def search_shops(request):
+
+
+def pinpoint_address(request):
+    services = Service.objects.all()
+    return render(request, 'bookings/search_form.html', {'services': services})
+
+def nearby_shops(request):
     if request.method == 'POST':
-        user_location = request.POST.get('location')
-        user_latitude, user_longitude = get_coordinates_from_address(user_location)
-
-        distance = float(request.POST.get('distance'))
-        selected_services = request.POST.getlist('services')
-
-        user_location_point = Point(user_longitude, user_latitude, srid=4326)
-
+        latitude = float(request.POST.get('latitude'))
+        longitude = float(request.POST.get('longitude'))
+        selected_service_id = request.POST.get('service')
+        
+        # Store selected service ID in session
+        request.session['selected_service_id'] = selected_service_id
+        request.session['latitude'] = latitude
+        request.session['longitude'] = longitude
+        # Print message if selected_service_id is saved in session
+        if selected_service_id:
+            print("Selected service ID saved in session:", selected_service_id)
+        # Print latitude and longitude saved in session
+        print("Latitude saved in session:", latitude)
+        print("Longitude saved in session:", longitude)
+        
+        # Convert 10 kilometers to degrees (approximate conversion)
+        range_distance_km = 5
+        latitude_range = range_distance_km / 111
+        longitude_range = range_distance_km / (111 * abs(math.cos(math.radians(latitude))))
+        
+        # Calculate latitude and longitude ranges
+        latitude_min = latitude - latitude_range
+        latitude_max = latitude + latitude_range
+        longitude_min = longitude - longitude_range
+        longitude_max = longitude + longitude_range
+        
+        # Query nearby shops based on latitude, longitude, and selected service
         nearby_shops = Shop.objects.filter(
             user_profile__latitude__isnull=False,
-            user_profile__longitude__isnull=False
-        ).annotate(
-            distance=Distance('user_profile__location', user_location_point)
-        ).filter(
-            distance__lte=distance,
-            services__in=selected_services
-        ).distinct()
+            user_profile__longitude__isnull=False,
+            user_profile__latitude__range=(latitude_min, latitude_max),
+            user_profile__longitude__range=(longitude_min, longitude_max),
+            services__id=selected_service_id
+        )
 
         return render(request, 'bookings/search_results.html', {'nearby_shops': nearby_shops})
-    else:
-        # Render the search form with available services
-        services = Service.objects.all()
-        return render(request, 'bookings/search_form.html', {'services': services})
-
-def get_coordinates_from_address(address):
-    # This function should use geocoding APIs (like Google Maps Geocoding API or Nominatim)
-    # to get latitude and longitude from the address provided by the user.
-    # For simplicity, I'm assuming it's already implemented.
-    latitude = 28.3949
-    longitude = 84.124
-    return latitude, longitude
-
-
 def book_service(request, shop_id):
     shop = Shop.objects.get(pk=shop_id)
-    user_id = request.user.id  # Assuming user is authenticated
+    user_id = request.user.id if request.user.is_authenticated else None
+    selected_service_id = request.session.get('selected_service_id')
+    latitude = request.session.get('latitude')
+    longitude = request.session.get('longitude')
+
+    if selected_service_id:
+        selected_service = Service.objects.get(pk=selected_service_id)
+        # Pass selected_service to the form when initializing it
+        form = BookServiceForm(shop=shop, selected_service=selected_service)
+    else:
+        selected_service = None
+        form = BookServiceForm(shop=shop)
+
     if request.method == 'POST':
         form = BookServiceForm(shop=shop, data=request.POST)
         if form.is_valid():
             book_service = form.save(commit=False)
             book_service.user_id = user_id
             book_service.shop = shop
+            book_service.latitude = latitude
+            book_service.longitude = longitude
+            book_service.location = request.POST.get('location')
+            book_service.time = request.POST.get('date')  # Assuming user selects date/time
+            book_service.services = selected_service  # Assign selected_service here
             book_service.save()
+            messages.success(request, 'Service booked successfully.')
             return redirect('index')
-    else:
-        form = BookServiceForm(shop=shop)
-    return render(request, 'bookings/book_service.html', {'shop': shop, 'form': form})
+        else:
+            print(form.errors)
+            print(request.POST) 
+    
+    return render(request, 'bookings/book_service.html', {'shop': shop, 'form': form, 'selected_service': selected_service})
+
 
 def update_booking_status(request):
     if request.method == 'POST':
@@ -76,12 +110,54 @@ def rate_shop(request, booking_id):
         RateBooking.objects.create(user=user, book_service=booking, review=review_text)
         return redirect('customerDashboard')  # Redirect to some page after submission
     else:
-        
         pass
     context = {
-        'booking':booking
+        'booking': booking
     }
     return render(request, 'bookings/rate_booking.html', context)
+# views.py
+from decimal import Decimal, InvalidOperation
+from django.shortcuts import get_object_or_404, render, redirect
+from products.models import Product
+from .models import Invoice, BookService
 
-
-
+def create_invoice(request, booking_id):
+    booking = get_object_or_404(BookService, id=booking_id)
+    
+    if hasattr(booking, 'invoice'):
+        return HttpResponseRedirect(reverse('invoice_detail', args=[booking.invoice.id]))
+    
+    if request.method == 'POST':
+        service_hours = int(request.POST.get('service_hours', 0))
+        product_ids = request.POST.getlist('products')
+        product_quantities = request.POST.getlist('product_quantities')
+        total_amount_str = request.POST.get('total_amount', '0')
+        
+        try:
+            total_amount = Decimal(total_amount_str)
+        except InvalidOperation:
+            total_amount = Decimal('0')
+        
+        invoice = Invoice.objects.create(
+            booking=booking,
+            service_hours=service_hours,
+            total_amount=total_amount
+        )
+        
+        for product_id, quantity in zip(product_ids, product_quantities):
+            if product_id and quantity:
+                product = Product.objects.get(id=product_id)
+                invoice_product = InvoiceProduct.objects.create(
+                    invoice=invoice,
+                    product=product,
+                    quantity=int(quantity)
+                )
+        
+        return HttpResponseRedirect(reverse('invoice_detail', args=[invoice.id]))
+    else:
+        products = Product.objects.filter(user=booking.shop)
+        return render(request, 'mechanicShop/create_invoice.html', {'booking': booking, 'products': products})
+    
+def invoice_detail(request, invoice_id):
+    invoice = get_object_or_404(Invoice, pk=invoice_id)
+    return render(request, 'mechanicShop/invoice_detail.html', {'invoice': invoice})
