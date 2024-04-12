@@ -23,7 +23,14 @@
                                         <div class="post-item position-relative h-100">
                                             <div class="post-content d-flex flex-column">
                                                 <h3 class="post-title">Shop Name: {{ booking.shop.shop_name }}</h3>
-                                                <p><strong>Service:</strong> {{ booking.services.name }}</p>
+                                                <p><strong>Selected Services:</strong></p>
+                                                <ul>
+                                                    {% for service in booking.selected_services.all %}
+                                                        <li>{{ service.name }}</li>
+                                                    {% empty %}
+                                                        <li>No services selected.</li>
+                                                    {% endfor %}
+                                                </ul>
                                                 <p><strong>Vehicle Type:</strong> {{ booking.vehicles }}</p>
                                                 <p><strong>Status:</strong> {{ booking.status }}</p>
                                                 <p><strong>Location:</strong> {{ booking.location }}</p>
@@ -31,6 +38,7 @@
                                                 <p><strong>Problem Description:</strong> {{ booking.problem_description }}</p>
                                                 <p><strong>Feedback:</strong> {{ booking.feedback }}</p>
                                                 <a href="{% url 'rate_shop' booking.id %}">Review</a>
+                                                <a href="{% url 'rooms' %}" class="btn btn-primary">Initiate Chat</a>
                                                 <hr>
                                             </div>
                                         </div>

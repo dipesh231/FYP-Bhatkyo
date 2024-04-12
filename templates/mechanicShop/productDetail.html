@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    {% include 'includes/alerts.html' %}
+    {% include 'includes/cover.html' %}
+
+    <section id="blog" class="blog">
+        <div class="container" data-aos="fade-up" data-aos-delay="100">
+            <div class="page-section account-header buyer-logged-in">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <!-- Load the sidebar here -->
+                        {% include 'includes/s_sidebar.html' %}
+                    </div>
+                    <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                        <div class="user-dashboard loader-holder">
+                            <div class="user-holder">
+                                <h2>Product Detail</h2>
+                                <div class="row">
+                                    <!-- Product details column -->
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="form-group">
+                                                        <label class="label">Product Name:</label>
+                                                        <input type="text" class="form-control" value="{{ product.product_name }}" readonly>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="label">Description:</label>
+                                                        <input type="text" class="form-control" value="{{ product.description }}" readonly>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="label">Quantity:</label>
+                                                        <input type="text" class="form-control" value="{{ product.total_quantity }}" readonly>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="label">Availability:</label>
+                                                        <input type="text" class="form-control" value="{{ product.availability }}" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="form-group">
+                                                        <label class="label">Price:</label>
+                                                        <input type="text" class="form-control" value="{{ product.price }}" readonly>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="label">Image:</label>
+                                                        <img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" width="100">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="label">Created At:</label>
+                                                        <input type="text" class="form-control" value="{{ product.created_at }}" readonly>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="label">Updated At:</label>
+                                                        <input type="text" class="form-control" value="{{ product.updated_at }}" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mt-3">
+                                        <a href="{% url 'edit_product' product.id %}" class="btn btn-primary">Edit</a>
+                                    </div>
+                                    <div class="col-md-6 mt-3">
+                                        <form method="post" action="{% url 'delete_product' product.id %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

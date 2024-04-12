@@ -31,7 +31,7 @@
             <li><a href="{% url 'myAccount' %}" > My Account</a></li>
              <li><a href="{% url 'logout' %}" class="btn btn-danger ml-3">Logout</span></a>
             {% else %}
-            <a href="{% url 'login' %}" class="btn btn-success"><span>Login</span></a>
+            <li><a href="{% url 'login' %}" class="btn btn-success">Login</a></li>
           {% endif %}
              </li>
       </ul>

@@ -39,6 +39,8 @@ def Cprofile(request):
 @user_passes_test(check_role_customer)
 def myBookings(request):
     bookings = BookService.objects.filter(user=request.user)
+    for booking in bookings:
+        booking.selected_services = booking.services.all() 
     context = {
         'bookings': bookings,
         'current_page': "Bookings",

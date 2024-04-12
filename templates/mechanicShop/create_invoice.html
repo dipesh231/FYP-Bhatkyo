@@ -22,18 +22,19 @@
                                     <p class="form-control-plaintext">{{ booking.id }}</p>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="service_name" class="form-label">Service Name</label>
-                                    <p class="form-control-plaintext">{{ booking.services.name }}</p>
+                                    <label for="services" class="form-label">Select Services</label>
+                                    <select name="services" id="services" class="form-select" multiple>
+                                        {% for service in booking.services.all %}
+                                            <option value="{{ service.id }}" data-price="{{ service.price }}">{{ service.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div id="service_hours_wrapper" style="display: none;">
+                                    <h4>Enter Service Hours for Each Selected Service:</h4>
+                                    <div id="service_hours_inputs"></div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="service_hours" class="form-label">Service Hours Used</label>
-                                    <input type="number" class="form-control" id="service_hours" name="service_hours" required>
-                                    <div class="invalid-feedback">
-                                        Please enter the service hours.
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="products" class="form-label">Select Product(s)</label>
+                                    <label for="products" class="form-label">Select Products</label>
                                     <select name="products" id="products" class="form-select" multiple>
                                         {% for product in products %}
                                             <option value="{{ product.id }}" data-price="{{ product.price }}">{{ product.product_name }}</option>
@@ -66,10 +67,14 @@
                             </form>
                             <script>
                                 document.getElementById('calculate_total').addEventListener('click', function() {
-                                    const serviceHours = parseFloat(document.getElementById('service_hours').value);
+                                    const serviceHoursInputs = document.querySelectorAll('.service-hours-input');
+                                    const servicePrices = Array.from(document.querySelectorAll('#services option:checked')).map(option => parseFloat(option.getAttribute('data-price')));
                                     const productQuantities = Array.from(document.querySelectorAll('.product-quantity-input')).map(input => parseFloat(input.value));
-                                    const servicePrice = parseFloat("{{ booking.services.price }}");
-                                    const serviceTotal = servicePrice * serviceHours;
+                                    let serviceTotal = 0;
+                                    serviceHoursInputs.forEach((input, index) => {
+                                        const serviceHours = parseFloat(input.value);
+                                        serviceTotal += servicePrices[index] * serviceHours;
+                                    });
                                     document.getElementById('service_total').innerText = serviceTotal.toFixed(2);
                                     let productTotal = 0;
                                     const products = document.getElementById('products');
@@ -84,17 +89,60 @@
                                     document.getElementById('grand_total').innerText = grandTotal.toFixed(2);
                                     document.getElementById('total_amount_input').value = grandTotal.toFixed(2);
                                 });
-
+                            
+                                document.getElementById('services').addEventListener('change', function() {
+                                    const selectedServices = Array.from(this.selectedOptions);
+                                    const serviceHoursWrapper = document.getElementById('service_hours_wrapper');
+                                    const serviceHoursInputsContainer = document.getElementById('service_hours_inputs');
+                            
+                                    if (selectedServices.length > 0) {
+                                        serviceHoursWrapper.style.display = 'block';
+                            
+                                        selectedServices.forEach(service => {
+                                            const serviceId = service.value;
+                                            const serviceName = service.text;
+                            
+                                            let inputContainer = document.getElementById('service_' + serviceId + '_hours_container');
+                                            if (!inputContainer) {
+                                                inputContainer = document.createElement('div');
+                                                inputContainer.classList.add('mb-3');
+                                                inputContainer.id = 'service_' + serviceId + '_hours_container';
+                            
+                                                const label = document.createElement('label');
+                                                label.setAttribute('for', 'service_' + serviceId + '_hours');
+                                                label.classList.add('form-label');
+                                                label.textContent = 'Service Hours for ' + serviceName;
+                            
+                                                const input = document.createElement('input');
+                                                input.setAttribute('type', 'number');
+                                                input.setAttribute('name', 'service_hours');
+                                                input.setAttribute('id', 'service_' + serviceId + '_hours');
+                                                input.classList.add('form-control');
+                                                input.classList.add('service-hours-input');
+                                                input.setAttribute('required', true);
+                            
+                                                inputContainer.appendChild(label);
+                                                inputContainer.appendChild(input);
+                            
+                                                serviceHoursInputsContainer.appendChild(inputContainer);
+                                            }
+                                        });
+                                    } else {
+                                        serviceHoursWrapper.style.display = 'none';
+                                        serviceHoursInputsContainer.innerHTML = ''; // Clear existing inputs
+                                    }
+                                });
+                            
                                 document.getElementById('products').addEventListener('change', function() {
                                     const selectedProducts = Array.from(this.selectedOptions).map(option => option.value);
                                     const productQuantitiesWrapper = document.getElementById('product_quantities_wrapper');
-
+                            
                                     if (selectedProducts.length > 0) {
                                         productQuantitiesWrapper.style.display = 'block';
                                         selectedProducts.forEach(productId => {
                                             const quantityLabel = document.querySelector(`label[for="product_${productId}_quantity"]`);
                                             const quantityInput = document.getElementById(`product_${productId}_quantity`);
-
+                            
                                             quantityLabel.style.display = 'block';
                                             quantityInput.style.display = 'block';
                                         });
@@ -109,6 +157,7 @@
                                     }
                                 });
                             </script>
+                            
                         </div>
                     </div>
                 </div>

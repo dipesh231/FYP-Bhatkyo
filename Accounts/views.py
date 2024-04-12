@@ -56,6 +56,7 @@ def registerShop(request):
         form = UserForm(request.POST, request.FILES)
         s_form = ShopForm(request.POST, request.FILES)
         if form.is_valid() and s_form.is_valid():
+            print("Forms are valid")
             password = form.cleaned_data['password']
             user = form.save(commit=False)
             user.set_password(password)
@@ -65,6 +66,7 @@ def registerShop(request):
             shop = s_form.save(commit=False)
             shop.user = user
             user_profile = UserProfile.objects.get(user=user)
+            
             shop.user_profile = user_profile
             shop.save()  # Save the Shop instance first
 
@@ -80,9 +82,10 @@ def registerShop(request):
             shop.save()  # Save the Shop instance again after associating many-to-many relationships
 
             messages.success(request, 'Your account has been registered successfully! Please wait for the approval')
-            return redirect('registerShop')
+            return redirect('login')
         else:
             print(form.errors)
+            print(s_form.errors) 
     else:
         form = UserForm()
         s_form = ShopForm()

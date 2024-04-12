@@ -9,5 +9,5 @@ urlpatterns = [
     path('rate_shop/<int:booking_id>/', views.rate_shop, name='rate_shop'),
     path('create_invoice/<int:booking_id>/', views.create_invoice, name='create_invoice'),
     path('invoice/<int:invoice_id>/', views.invoice_detail, name='invoice_detail'),
-
+    
 ]

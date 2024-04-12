@@ -3,6 +3,11 @@
 {% load static %}
 
 {% block content %}
+<style>
+    body{
+        background-color :gray;
+    }
+</style>
 <section class="ftco-section">
     <div class="container">
         <div class="row justify-content-center">
@@ -83,6 +88,10 @@
                                     <label class="label" for="shop_lisence">Shop License</label>
                                     <input type="file" class="form-control-file" id="id_shop_lisence" name="shop_lisence" accept="image/*">
                                 </div>
+                                <div class="form-group col-md-6">
+                                    <label class="label" for="shop_image">Shop Image</label>
+                                    <input type="file" class="form-control-file" id="id_shop_image" name="shop_image" accept="image/*">
+                                </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label class="label" for="address">Shop Address</label>
@@ -118,16 +127,7 @@
                                 </div>
                             </div>
                             <!-- Error list is placed inside the form -->
-                            <ul class="errorlist">
-                                {% for field in form %}
-                                    {% if field.errors %}
-                                        {% for error in field.errors %}
-                                            <li style="color: orange;">{{ error }}</li>
-                                        {% endfor %}
-                                    {% endif %}
-                                {% endfor %}
-                                <li style="color: red;">{{ form.non_field_errors }}</li>
-                            </ul>
+                            
                             <div class="form-group">
                                 <button type="submit" class="form-control btn1 btn-primary rounded submit px-3">Sign Up</button>
                             </div>

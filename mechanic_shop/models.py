@@ -6,7 +6,7 @@ from Accounts.models import User, UserProfile
 class Service(models.Model):
     
     name = models.CharField(max_length=50)
-    price = models.IntegerField(max_length =10)
+    price = models.IntegerField()
     service_picture = models.ImageField(upload_to='service/servicePicture')
     description = models.TextField()
 

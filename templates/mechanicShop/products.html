@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'includes/alerts.html' %}
+{% include 'includes/cover.html' %}
+
+<section id="blog" class="blog">
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="page-section account-header buyer-logged-in">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                    <!-- Load the sidebar here -->
+                    {% include 'includes/s_sidebar.html' %}
+                    <div class="mt-4">
+                        <h4>Filter by Name:</h4>
+                        <select id="productFilter" class="form-select">
+                            <option value="">All</option>
+                            <option value="ascending">Ascending</option>
+                            <option value="descending">Descending</option>
+                            <!-- Add more options as needed -->
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                    <div class="user-dashboard loader-holder">
+                        <div class="user-holder">
+                            <div class="row">
+                                <div class="col">
+                                    <h2>Products</h2>
+                                </div>
+                                <div class="col-auto">
+                                    <a href="{% url 'add_product' %}" class="btn btn-success align-items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                            <path d="M7.5 1a.5.5 0 0 1 .5.5V7h5.5a.5.5 0 0 1 0 1H8v5.5a.5.5 0 0 1-1 0V8H1.5a.5.5 0 0 1 0-1H7V1.5A.5.5 0 0 1 7.5 1z"/>
+                                        </svg>
+                                        Add Product
+                                    </a>
+                                </div>
+                            </div><br> 
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="user-orders-list">
+                                        <div class="responsive-table" style="max-height: 400px; overflow-y: auto;">
+                                            <table class="table table-hover table-borderless">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">ID</th>
+                                                        <th scope="col">Name</th>
+                                                        <th scope="col">Quantity</th>
+                                                        <th scope="col">Available</th>
+                                                        <th scope="col">Price</th>
+                                                        <th scope="col">Image</th>
+                                                        <th scope="col">Created At</th>
+                                                        <th scope="col">Updated At</th>
+                                                        <th scope="col">Details</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for product in products %}
+                                                    <tr>
+                                                        <td>{{ product.id }}</td>
+                                                        <td>{{ product.product_name }}</td>
+                                                        <td>{{ product.total_quantity }}</td>
+                                                        <td>{{ product.availability }}</td>
+                                                        <td>{{ product.price }}</td>
+                                                        <td><img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" width="100"></td>
+                                                        <td>{{ product.created_at }}</td>
+                                                        <td>{{ product.updated_at }}</td>
+                                                        <td><a href="{% url 'product_detail' product.id%}" class="btn btn-danger">Details</a></td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Select the filter dropdown
+        var productFilter = document.getElementById("productFilter");
+
+        // Add event listener for when the dropdown value changes
+        productFilter.addEventListener("change", function() {
+            // Get the selected filter value
+            var selectedFilter = productFilter.value;
+
+            // Select all table rows except the header row
+            var rows = document.querySelectorAll("#blog .table tbody tr");
+
+            // Convert the NodeList to an array for easier manipulation
+            var rowsArray = Array.from(rows);
+
+            // Sort the rows based on the product name
+            rowsArray.sort(function(row1, row2) {
+                var productName1 = row1.cells[1].textContent.toLowerCase();
+                var productName2 = row2.cells[1].textContent.toLowerCase();
+                if (selectedFilter === "ascending") {
+                    return productName1.localeCompare(productName2);
+                } else if (selectedFilter === "descending") {
+                    return productName2.localeCompare(productName1);
+                }
+                // For "All" option or invalid selection, return 0 to maintain current order
+                return 0;
+            });
+
+            // Remove existing rows from the table
+            rows.forEach(function(row) {
+                row.parentNode.removeChild(row);
+            });
+
+            // Append sorted rows back to the table
+            rowsArray.forEach(function(row) {
+                document.querySelector("#blog .table tbody").appendChild(row);
+            });
+        });
+    });
+</script>
+
+
+{% endblock %}

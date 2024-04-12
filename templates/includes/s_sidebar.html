@@ -11,6 +11,9 @@
           <li class="{% if 'bookings' in request.path %}active{% endif %}">
               <a href="{% url 'bookings' %}">Bookings</a>
           </li>
+          <li class="{% if 'products' in request.path %}active{% endif %}">
+            <a href="{% url 'products' %}">Products</a>
+        </li>
           <li><a href="projects.html">Orders</a></li>
           <li><a href="blog.html">Change Password</a></li>
           <li><a href="{% url 'logout' %}" class="btn btn-danger ml-3">Logout</a></li>

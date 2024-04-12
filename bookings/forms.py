@@ -15,7 +15,7 @@ class BookServiceForm(forms.ModelForm):
             'services': forms.HiddenInput(),
         }
 
-    def __init__(self, shop, location=None, latitude=None, longitude=None, selected_service=None, *args, **kwargs):
+    def __init__(self, shop, location=None, latitude=None, longitude=None, selected_services=None, *args, **kwargs):
         super(BookServiceForm, self).__init__(*args, **kwargs)
         self.fields['vehicles'].queryset = shop.vehicle_choices
         self.initial['shop'] = shop
@@ -23,8 +23,8 @@ class BookServiceForm(forms.ModelForm):
         self.initial['location'] = location
         self.initial['longitude'] = longitude
 
-        if selected_service and selected_service in shop.services.all():
-            self.initial['services'] = selected_service
+        if selected_services and selected_services in shop.services.all():
+            self.initial['services'] = selected_services
         else:
             self.initial['services'] = None  # Reset the selected service if it doesn't belong to the shop
 

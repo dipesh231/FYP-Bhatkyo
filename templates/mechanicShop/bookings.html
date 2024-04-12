@@ -12,6 +12,19 @@
                 <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                     <!-- Load the sidebar here -->
                     {% include 'includes/s_sidebar.html' %}
+                    <div class="mt-4">
+                        <h4>Filter by Status:</h4>
+                        <select id="bookingFilter" class="form-select">
+                            <option value="">All</option>
+                            <option value="pending">Pending</option>
+                            <option value="accepted">Accepted</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="in_progress">In Progress</option>
+                            <option value="completed">Completed</option>
+
+                            <!-- Add more options as needed -->
+                        </select>
+                    </div>
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
                     <div class="user-dashboard loader-holder">
@@ -30,6 +43,7 @@
                                                         <th scope="col">Vehicles</th>
                                                         <th scope="col">Status</th>
                                                         <th scope="col">Date</th>
+                                                        <th scope="col">Chat</th>
                                                         <th scope="col">Action</th>
                                                     </tr>
                                                 </thead>
@@ -37,13 +51,22 @@
                                                     {% for booking in bookings %}
                                                     <tr>
                                                         <td>{{ booking.id }}</td>
-                                                        <td>{{ booking.services.name }}</td>
+                                                        <td>
+                                                            <ul>
+                                                                {% for service in booking.services.all %}
+                                                                    <li>{{ service.name }}</li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </td>
                                                         <td>{{ booking.user.name }}</td>
                                                         <td>{{ booking.vehicles }}</td>
                                                         <td>{{ booking.status }}</td>
                                                         <td>{{ booking.date }}</td>
                                                         <td>
                                                             <a href="{% url 'booking_details' booking.id %}" class="btn btn-danger">Details</a>
+                                                        </td>
+                                                        <td>
+                                                            <a href="{% url 'rooms' %}" class="btn btn-danger">Chat</a>
                                                         </td>
                                                     </tr>
                                                     {% endfor %}
@@ -61,4 +84,30 @@
         </div>
     </div>
 </section>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Select the filter dropdown
+        var bookingFilter = document.getElementById("bookingFilter");
+
+        // Add event listener for when the dropdown value changes
+        bookingFilter.addEventListener("change", function() {
+            // Get the selected status
+            var selectedStatus = bookingFilter.value;
+
+            // Select all table rows except the header row
+            var rows = document.querySelectorAll("#myBookingsTable tbody tr");
+
+            // Loop through each row and hide/show based on the selected status
+            rows.forEach(function(row) {
+                var status = row.cells[4].textContent.toLowerCase(); // Get the status column value
+                if (selectedStatus === "" || status === selectedStatus) {
+                    row.style.display = ""; // Show the row
+                } else {
+                    row.style.display = "none"; // Hide the row
+                }
+            });
+        });
+    });
+</script>
+
 {% endblock %}

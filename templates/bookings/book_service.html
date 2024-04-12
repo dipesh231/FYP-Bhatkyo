@@ -2,6 +2,8 @@
 {% load static %}
 
 {% block content %}
+{% include 'includes/alerts.html' %}
+
 {% include 'customers/cover.html' %}
 <section id="blog" class="blog">
     <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -20,9 +22,16 @@
                         <input type="text" class="form-control" name="shop_name" value="{{ shop.shop_name }}" readonly>
                     </div>
                     <div class="form-group">
-                        <label class="label" for="services">Services</label>
-                        <input type="text" class="form-control" value="{{ selected_service.name }}" readonly>
+                        <label class="label" for="services">Selected Services:</label><br>
+                        {% if selected_services %}
+                            {% for service in selected_services %}
+                                {{ service.name }}<br>
+                            {% endfor %}
+                        {% else %}
+                            No services selected. Please go back and select services.
+                        {% endif %}
                     </div>
+                
                     <div class="form-group">
                         <label class="label" for="vehicles">Vehicles</label><br>
                         {% for value, label in shop.vehicle_choices %}
@@ -36,7 +45,7 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label class="label" for="date">Date</label>
-                        <input type="datetime-local" class="form-control" id="id_date" name="date">
+                        <input type="datetime-local" class="form-control" id="id_date" name="date" min="{{ current_date }}">
                     </div>
                 </div>
             <!-- Map column -->

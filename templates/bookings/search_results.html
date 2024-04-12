@@ -1,56 +1,67 @@
-<!-- search_results.html -->
 {% extends 'base.html' %}
 
 {% block content %}
 {% include 'customers/cover.html' %}
-<h2>Search Results</h2>
-{% if nearby_shops %}
-<section id="services" class="services section-bg">
-<div class="container-xl">
-      <div class="row">
-        <div class="col-md-12">
-          <h2>Featured <b>Services</b></h2>
-          <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="0">
-            <!-- Wrapper for carousel items -->
-            <div class="carousel-inner">
-              <div class="row">
-                {% for shop in nearby_shops %}
-                <div class="col-sm-3">
-                  <a href="" class="product-link">
-                    <div class="thumb-wrapper">
-                      <span class="wish-icon"><i class="fa fa-heart-o"></i></span>
-                      <div class="img-box">
-                        <img src="{{ shop.shop_image.url }}" class="img-fluid" alt="{{ shop.shop_name }}">
-                      </div>
-                      <div class="thumb-content">
-                        <h4>{{ shop.shop_name }}</h4>
-                        <h4>Vehicle Choices: {{ shop.get_vehicles_display }}</h4>
-                        <h4>Services:</h4>
-                        <ul>
-                          {% for service in shop.services.all %}
-                          <li>{{ service.name }}</li>
-                          {% endfor %}
-                        </ul>
-                        <a href="{% url 'book_service' shop_id=shop.id  %}" class="btn btn-primary">Book Service</a>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-                {% endfor %}
-              </div>
-            </div>           
-          </div>
-        </div>
+<section id="recent-blog-posts" class="recent-blog-posts">
+  <div class="container" data-aos="fade-up">
+      <div class="section-header">
+          <h2>Search Results</h2>
       </div>
-    </div>
-  </div>  
-{% else %}
-    <p>No shops found within the specified distance and services. Try again</p>
-    <div class="d-flex justify-content-center justify-content-lg-start">
-        <a href="{% url 'pinpoint_address' %}" class="btn btn-success">Book a Service</a>
-      </div>
-      <br>
-{% endif %}
 
+      <div class="row gy-5">
+
+          {% if nearby_shops %}
+              {% for shop in nearby_shops %}
+                  <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                      <div class="post-item position-relative h-100">
+                          <div class="post-img position-relative overflow-hidden">
+                              <img src="{{ shop.shop_image.url }}" class="img-fluid" alt="{{ shop.shop_name }}">
+                              <span class="post-date">{{shop.created_at}}</span>
+                          </div>
+                          <div class="post-content d-flex flex-column">
+                              <h3 class="post-title">{{ shop.shop_name }}</h3>
+                              <div class="meta d-flex align-items-center">
+                                  <div class="d-flex align-items-center">
+                                      <i class="bi bi-person"></i> <span class="ps-2">{{ shop.user.name }}</span>
+                                  </div>
+                                  <span class="px-3 text-black-50">/</span>
+                                  <div class="d-flex align-items-center">
+                                      <i class="bi bi-phone"></i> <span class="ps-2">{{shop.user.phone_number}}</span>
+                                  </div>
+                                  <span class="px-3 text-black-50">/</span>
+                                  <div class="d-flex align-items-center">
+                                      <i class="bi bi-gear"></i> <span class="ps-2">{{ shop.get_vehicles_display }}</span>
+                                  </div>
+                              </div>
+                              <hr>
+                              <h4>Services:</h4>
+                              <ul>
+                                {% for service in shop.services.all %}
+                                <li>{{ service.name }}</li>
+                                {% endfor %}
+                              </ul>
+                              <div class="d-flex">
+                                <div class="col">
+                                  <a href="{% url 'book_service' shop_id=shop.id  %}" class="btn btn-dark">Book Service</a>
+                                </div>
+                                <div class="col-pl-5">
+                                  <button class="btn btn-warning" onclick="createChatRoom('{{ shop.id }}')">Chat</button>
+                                </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div><!-- End post item -->
+              {% endfor %}
+          {% else %}
+              <div class="col-md-12">
+                  <p>No shops found within the specified distance and services. Try again.</p>
+                  <div class="d-flex justify-content-center justify-content-lg-start">
+                      <a href="{% url 'pinpoint_address' %}" class="btn btn-success">Book a Service</a>
+                  </div>
+              </div>
+          {% endif %}
+
+      </div><!-- End row -->
+  </div><!-- End container -->
 </section>
 {% endblock %}

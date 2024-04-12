@@ -4,6 +4,8 @@
 {% load cart_tag %}
 
 {% block content %}
+{% include 'customers/cover.html' %}
+
 
 <div class="productDetail">
  <div class="card">
@@ -12,7 +14,7 @@
             <div class="title">
                 <div class="row">
                     <div class="col"><h4><b>Shopping Cart</b></h4></div>
-                    <div class="col align-self-center text-right text-muted">3 items</div>
+                    <div class="col align-self-center text-right text-muted"> items</div>
                 </div>
             </div> 
              
@@ -28,10 +30,10 @@
                     </div>
                     
                     <div class="col">
-                        <div class="row">${{value.price}}</div>
+                        <div class="row">Rs.{{value.price}}</div>
                     </div>
                     <div class="col">
-                        <div class="row">${{ value.price|multiply:value.quantity }}</div>
+                        <div class="row">Rs.{{ value.price|multiply:value.quantity }}</div>
                     </div>
                     <div class = "col">
                         <span class="close"><a href = "{% url 'item_clear' key %}">&#10005;</span></div>
@@ -45,19 +47,19 @@
             <div><h5><b>Summary</b></h5></div>
             <hr>
             <div class="row">
-                <div class="col" style="padding-left:0;">ITEMS 3</div>
+                <div class="col" style="padding-left:0;">ITEMS</div>
                 <div class="col text-right">Rs. {{cart_total_amount}}</div>
             </div>
-            <form>
+            {% comment %} <form>
                 <p>SHIPPING</p>
-                <select><option class="text-muted">Standard-Delivery- &euro;5.00</option></select>
+                <select><option class="text-muted">Standard-Delivery- &Rs;5.00</option></select>
                 <p>GIVE CODE</p>
                 <input id="code" placeholder="Enter your code">
-            </form>
+            </form> {% endcomment %}
             <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
                 <div class="col">TOTAL PRICE : Rs. {{cart_total_amount}}</div>
             </div>
-            <a href={% url "init" %} ><button id="checkout-button" class="btn">CHECKOUT</button></a>
+            <a href={% url "init"  %} ><button id="checkout-button" class="btn">CHECKOUT</button></a>
         </div>
     </div>
     

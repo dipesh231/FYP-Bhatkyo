@@ -3,6 +3,8 @@
 {% load static %}
 
 {% block content %}
+{% include 'includes/alerts.html' %}
+
 
 <section id="hero" class="hero">
   <div class="info d-flex align-items-center">
@@ -46,158 +48,197 @@
     </a>
 
   </div>
-
+</section>
   <main id="main">
-    <section id="services" class="services section-bg">
-        <div class="container" data-aos="fade-up">
-            <div class="section-header">
-                <h2>Featured <b>Services</b></h2>
-                <p>Voluptatem quibusdam ut ullam perferendis repellat non ut consequuntur est eveniet deleniti fignissimos eos quam</p>
-            </div>
-            <div class="row gy-4">
-              {% for shop in shops %}
-              <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                  <div class="service-item position-relative">
-                      <img src="{{ shop.shop_image }}">
-                      <h4>{{ shop.shop_name }}</h4>
-                      <h4>Vehicle Choices: {{ shop.vehicles }}</h4>
-                      <h4>Services:</h4>
-                      {% for service in shop.services.all %}
-                      {{ service.name }}
-                      {% endfor %}
-                      <form action="{% url 'book_service' shop.id %}" method="post">
-                          {% csrf_token %}
-                          <input type="hidden" name="shop_id" value="{{ shop.id }}">
-                          {{ form.as_p }}
-                          <button type="submit" class="btn btn-primary">Book Service</button>
-                      </form>
+   
+    <div class="product">
+      <div class="container-xl">
+          <div class="row">
+              <div class="col-md-12">
+                  <h2>Featured <b>Products</b></h2>
+                  <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="0">
+                      <!-- Carousel indicators -->
+                      <ol class="carousel-indicators">
+                          {% for product in products %}
+                          {% if forloop.first or forloop.counter0|divisibleby:"4" %}
+                              <li data-target="#myCarousel" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
+                              {% endif %}
+
+                          {% endfor %}
+                      </ol>
+                      <!-- Wrapper for carousel items -->
+                      <div class="carousel-inner">
+                          {% for product in products %}
+                              {% if forloop.first or forloop.counter0|divisibleby:"4" %}
+                                  <div class="item carousel-item {% if forloop.first %}active{% endif %}">
+                                      <div class="row">
+                              {% endif %}
+                              <div class="col-sm-3">
+                                  <div class="thumb-wrapper">
+                                      <span class="wish-icon"><i class="fa fa-heart-o"></i></span>
+                                      <div class="img-box">
+                                          <img src="{{ product.product_image.url }}" class="img-fluid" alt="{{ product.product_name }}">
+                                      </div>
+                                      <div class="thumb-content">
+                                          <h4>{{ product.product_name }}</h4>
+                                          <p class="price">Rs.{{ product.price }}</b></p>
+                                          <p class="item-price"><strike>Total Quantity:{{ product.total_quantity }}</strike> <span>Availability: {{ product.availability }}</span></p>
+                                            <p> </p>
+                                            <p></p>
+                                          <a href="{% url 'cart_add' product.id %}"  class="btn btn-primary">Add to Cart</a>
+                                      </div>
+                                  </div>
+                              </div>
+                              {% if forloop.last or forloop.counter0|add:"1"|divisibleby:"4" %}
+                                      </div>
+                                  </div>
+                              {% endif %}
+                          {% endfor %}
+                      </div>
+                      <!-- Carousel controls -->
+                      <a class="carousel-control-prev" href="#myCarousel" data-slide="prev">
+                          <i class="fa fa-angle-left"></i>
+                      </a>
+                      <a class="carousel-control-next" href="#myCarousel" data-slide="next">
+                          <i class="fa fa-angle-right"></i>
+                      </a>
                   </div>
               </div>
-              {% endfor %}
-          </div>
-        </div>
-    </section>
-
-{% comment %} <div class="product">
-  <div class="container-xl">
-      <div class="row">
-          <div class="col-md-12">
-              <h2>Featured <b>Services</b></h2>
-              <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="0">
-                <!-- Wrapper for carousel items -->
-                <div class="carousel-inner">
-                        <div class="row">
-                          {% for shop in shops %}
-                            <div class="col-sm-3">
-                                <a href="" class="product-link">
-                                    <div class="thumb-wrapper">
-                                        <span class="wish-icon"><i class="fa fa-heart-o"></i></span>
-                                        <div class="img-box">
-                                            <img src="" class="img-fluid">
-                                        </div>
-                                        <div class="thumb-content">
-                                            <h4>{{ shop.shop_name }}</h4>
-                                            <h4>Vehicle Choices: {{ shop.vehicles }}</h4>
-                                              Services: 
-                                              {% for service in shop.services.all %}
-                                              <li>{{ service.name }}</li>
-                                            {% endfor %}
-                                          
-                                            <form action="{% url 'book_service' shop.id %}" method="post">
-                                              {% csrf_token %}
-                                              <input type="hidden" name="shop_id" value="{{ shop.id }}">
-                                              {{ form.as_p }}
-                                              <button type="submit" class="btn btn-primary">Book Service</button>
-                                          </form>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            {% endfor %}
-                        </div>
-                   
-                </div>
-                <!-- Carousel controls -->
-                <a class="carousel-control-prev" href="#myCarousel" data-slide="prev">
-                    <i class="fa fa-angle-left"></i>
-                </a>
-                <a class="carousel-control-next" href="#myCarousel" data-slide="next">
-                    <i class="fa fa-angle-right"></i>
-                </a>
-            </div>
-            
           </div>
       </div>
   </div>
-</div> {% endcomment %}
-<section id="services" class="services section-bg">
-  <div class="container-xl">
-      <div class="row">
-          <div class="col-md-12">
-              <h2>Featured <b>Products</b></h2>
-              <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="0">
-                <!-- Wrapper for carousel items -->
-                <div class="carousel-inner">
-                  <div class="row">
-                    {% for product in products %}
-                            <div class="col-sm-3">
-                                <a href="{% url 'productDetail' product.id %}" class="product-link">
-                                    <div class="thumb-wrapper">
-                                        <span class="wish-icon"><i class="fa fa-heart-o"></i></span>
-                                        <div class="img-box">
-                                            <img src="{{ product.product_image.url }}" class="img-fluid" alt="{{ product.product_name }}">
-                                        </div>
-                                        <div class="thumb-content">
-                                            <h4>{{ product.product_name }}</h4>
-                                            <p>{{ product.description|truncatewords:10 }}</p>
-                                            <p>Price: ${{ product.price }}</p>
-                                            <p>Total Quantity: {{ product.total_quantity }}</p>
-                                            <p>Availability: {{ product.availability }}</p>
-                                            <a href="" class="btn btn-primary">Buy Now</a>
-                                            <a href="{% url 'cart_add' product.id %}" class="btn btn-primary">Add to Cart</a>
-
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                    {% endfor %}
-                          </div>
-                </div>
-                <!-- Carousel controls -->
-                {% comment %} <a class="carousel-control-prev" href="#myCarousel" data-slide="prev">
-                    <i class="fa fa-angle-left"></i>
+  
+  <section id="features" class="features section-bg">
+    <div class="container" data-aos="fade-up">
+        <ul class="nav nav-tabs row g-2 d-flex">
+            {% for service in services %}
+            <li class="nav-item col-3">
+                <a class="nav-link {% if forloop.first %}active show{% endif %}" data-bs-toggle="tab" data-bs-target="#tab-{{ forloop.counter }}">
+                    <h4>{{ service.name }}</h4>
                 </a>
-                <a class="carousel-control-next" href="#myCarousel" data-slide="next">
-                    <i class="fa fa-angle-right"></i>
-                </a> {% endcomment %}
-            </div>
-            
-          </div>
+            </li><!-- End tab nav item -->
+            {% endfor %}
+        </ul>
+
+        <div class="tab-content">
+            {% for service in services %}
+            <div class="tab-pane {% if forloop.first %}active show{% endif %}" id="tab-{{ forloop.counter }}">
+                <div class="row">
+                    <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="100">
+                        <h3>{{ service.name }}</h3>
+                        <p class="fst-italic">{{ service.description }}</p>
+                        <p>Bhatkyo is one among the roadside assistance provider with its own fleet of towing trucks providing Car Towing Service. Apart from the own fleet, We also have a large network of Car flatbed towing trucks including Zero degree Car Tow trucks. Our strong network enable us to ensure service highest availability and fastest reach time.</p>
+                        <ul>
+                            <li><i class="bi bi-check2-all"></i> All spares, consumables & applicable taxes are charged extra</li>                            
+                            <li><i class="bi bi-check2-all"></i> The actual service charges are depending on the final charges displayed in booking</li>
+                            <li><i class="bi bi-check2-all"></i> Check the vehicle & prepare job card with all pre-existing details.</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-6 order-1 order-lg-2 text-center" data-aos="fade-up" data-aos-delay="200">
+                        <img src="{{ service.service_picture.url }}" alt="{{ service.name }}" class="img-fluid" style="width:400px; height:300px;">
+                    </div>
+                </div>
+            </div><!-- End tab content item -->
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section id="features" class="features section-bg" style="background-color:#f5f6f7;">
+  <div class="container" data-aos="fade-up">
+      <ul class="nav nav-tabs row g-2 d-flex">
+      </ul>
+
+      <div class="tab-content">
+        <h1>Availability</h1>
+
+          <div class="tab-pane active show" id="tab-1">
+              <div class="row">
+                  <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="100">
+                      <h3></h3>
+                      <p class="fst-italic"></p>
+                      <p>Bhatkyo is one among the roadside assistance provider with its own fleet of towing trucks providing Car Towing Service. Apart from the own fleet, We also have a large network of Car flatbed towing trucks including Zero degree Car Tow trucks. Our strong network enable us to ensure service highest availability and fastest reach time.</p>
+                      <ul>
+                          <li><i class="bi bi-check2-all"></i> All spares, consumables & applicable taxes are charged extra</li>                            
+                          <li><i class="bi bi-check2-all"></i> The actual service charges are depending on the final charges displayed in booking</li>
+                          <li><i class="bi bi-check2-all"></i> Check the vehicle & prepare job card with all pre-existing details.</li>
+                      </ul>
+                      <div class="d-flex justify-content-center justify-content-lg-start">
+                          <a href="{% url 'pinpoint_address' %}" class="btn btn-success">Check Availability</a><br>
+                      </div>
+                  </div>
+                  <div class="col-lg-6 order-1 order-lg-2 text-center" data-aos="fade-up" data-aos-delay="200">
+                      <div id="map" style="width: 100%; height: 400px;"></div>
+                      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+                      <script>
+                          document.addEventListener("DOMContentLoaded", function () {
+                              var map = L.map('map').setView([28.3949, 84.124], 7); // Set initial map view for Nepal
+                      
+                              // Add tile layer for Nepal map
+                              L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                              }).addTo(map);
+                      
+                              // Fetch shop locations using Django template tags
+                              // Assuming shops is a list of dictionaries containing shop locations
+                              // Modify this part according to your Django implementation
+                              var shops = [
+                                  {% for shop in shops %}
+                                  {
+                                      name: "{{ shop.shop_name }}",
+                                      latitude: "{{ shop.user_profile.latitude }}",
+                                      longitude: "{{ shop.user_profile.longitude }}"
+                                  },
+                                  {% endfor %}
+                              ];
+                      
+                              // Add markers for each shop
+                              shops.forEach(function (shop) {
+                                  L.marker([shop.latitude, shop.longitude]).addTo(map)
+                                      .bindPopup(shop.name);
+                              });
+                          });
+                      </script>
+                  </div>
+              </div>
+          </div><!-- End tab content item -->
       </div>
   </div>
 </section>
-{% comment %} <section id="services" class="services section-bg">
-  <div class="info d-flex align-items-center">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="" data-aos-delay="200">
-          <h1>Bike & Car Repair Service</h1>
-          <h2>Anytime & Anywhere in Nepal</h2>
-          <div class="d-flex justify-content-center justify-content-lg-start">
-            <a href="#about" class="btn-get-started scrollto">Register Shop</a>
-          </div>
-          <h2>sdfs</h2>
+
+
+
+<section id="get-started" class="get-started section-bg">
+  <div class="container">
+    <div class="row justify-content-between gy-4">
+      <div class="col-lg-6 d-flex align-items-center" data-aos="fade-up">
+        <div class="content">
+          <h3>Join Now</h3>
+          <h2>Serve With Us And Earn More</h2>
+          <p>Step into our service partner network and become an esteemed member of a 10000+ technician family to unlock the ultimate earning potential. Seize this chance to grow your business by joining our service network. Let's achieve unparalleled success together!!</p>
+
           <div class="right-align">
             <h5>24/7 Service</h5>
+            {% if not user.is_authenticated %}
             <a href="/accounts/registerShop/" class="btn btn-success" type="submit" style="margin-left:300px;">Register Shop</a>
+            {% endif %}
           </div>
         </div>
-        <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="zoom-in" data-aos-delay="200">
-          <img src="{% static 'images/car.png' %}" class="img-fluid animated" alt="">
-        </div>
       </div>
+          <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="zoom-in" data-aos-delay="200">
+            <img src="{% static 'images/car.png' %}" class="img-fluid animated" alt="">
+          </div>
     </div>
   </div>
-</section>  {% endcomment %}
+</section>
 
-{% endblock content %}
+ 
+</main>
+<script>
+  $(document).ready(function(){
+    $(".wish-icon i").click(function(){
+      $(this).toggleClass("fa-heart fa-heart-o");
+    });
+  });	
+  </script>
+{% endblock %}
