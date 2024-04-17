@@ -23,7 +23,7 @@
             <li><a href="#">Starting Problem</a></li>
           </ul>
         </li>
-        <li><a href="projects.html">Products</a></li>
+        <li><a href="{% url 'show_products' %}">Products</a></li>
         <li><a href="blog.html">About Us</a></li>
         <li><a href="contact.html">Contact</a></li>
         <li><a href="{% url 'cart_detail' %}" class="cart-icon" class="count" {{request.session.cart|length}}><i class="bi bi-cart3" style="font-size: 24px;"></i></a></li>

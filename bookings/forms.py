@@ -28,3 +28,9 @@ class BookServiceForm(forms.ModelForm):
         else:
             self.initial['services'] = None  # Reset the selected service if it doesn't belong to the shop
 
+from .models import RateBooking
+
+class RateBookingForm(forms.ModelForm):
+    class Meta:
+        model = RateBooking
+        fields = ['rating', 'review']

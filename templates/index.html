@@ -16,7 +16,7 @@
           <div class="d-flex justify-content-center justify-content-lg-start">
             <a href="{% url 'pinpoint_address' %}" class="btn-get-started">Book a Service</a>
           </div>
-          <h5 style="font-size:45px; color: white;">sdfs</h5>
+          <h5 style="font-size:33px; color: white;">Expert Mechanics at Your Service</h5>
           <div class="right-align">
             <h5 style="font-size:25px; color: white;">24/7 Service</h5>
             {% if not user.is_authenticated %}
@@ -25,7 +25,7 @@
           </div>
         </div>
         <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="" data-aos-delay="200">
-          <img src="{% static 'images/car.png' %}" class="img-fluid animated" alt="">
+          {% comment %} <img src="{% static 'images/car.png' %}" class="img-fluid animated" alt=""> {% endcomment %}
         </div>
       </div>
     </div>
@@ -34,7 +34,7 @@
 
   <div id="hero-carousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
 
-    <div class="carousel-item active" style="background-image: url({% static 'img/hero-carousel/hero-carousel-1.jpg' %})"></div>
+    <div class="carousel-item active" style="background-image: url({% static 'img/hero-carousel/car2.jpg' %})"></div>
 {% comment %} <div class="carousel-item" style="background-image: url({% static 'img/hero-carousel/hero-carousel-2.jpg' %})"></div>
 <div class="carousel-item" style="background-image: url({% static 'img/hero-carousel/hero-carousel-3.jpg' %})"></div>
 <div class="carousel-item" style="background-image: url({% static 'img/hero-carousel/hero-carousel-4.jpg' %})"></div>
@@ -107,6 +107,7 @@
           </div>
       </div>
   </div>
+  
   
   <section id="features" class="features section-bg">
     <div class="container" data-aos="fade-up">
@@ -231,7 +232,71 @@
     </div>
   </div>
 </section>
+{% if shop_reviews %}
+<section id="testimonials" class="testimonials section-bg" style = "background-color: #f5f6f7;">
+    <div class="container" data-aos="fade-up">
+        <div class="section-header">
+            <h2>Reviews</h2>
+            <p>Our Happy Customers</p>
+        </div>
 
+        <div class="slides-2 swiper">
+            <div class="swiper-wrapper">
+                
+                {% for review in shop_reviews %}
+                <div class="swiper-slide">
+                    <div class="testimonial-wrap">
+                        <div class="testimonial-item">
+                            <!-- Display the reviewer's profile picture -->
+                            <img src="{{ review.user.userprofile.profile_picture.url }}" class="testimonial-img" alt="Profile Picture">
+                            <!-- Display the reviewer's name -->
+                            <h3>{{ review.user.name }}</h3>
+                            <h3>{{ review.book_service.shop.shop_name}}</h3>
+                            {% if review.book_service.services %}
+                            {% for service in review.book_service.services.all %}
+                                {% if service.name %}
+                                    <h4>{{ service.name }}</h4>
+                                {% else %}
+                                    <p>No service name available</p>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <p>No services booked</p>
+                        {% endif %}
+                                                    
+                            <div class="stars">
+                                {% if review.rating %}
+                                    {% for _ in "x"|ljust:5 %}
+                                        {% if forloop.counter <= review.rating %}
+                                            <i class="bi bi-star-fill"></i> <!-- Fills a star -->
+                                        {% else %}
+                                            <i class="bi bi-star"></i> <!-- Empty star -->
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    <p>No rating available</p> <!-- If there's no rating -->
+                                {% endif %}
+                            </div>
+                            
+                            
+                            
+                            <!-- Display the review text -->
+                            <p>
+                                <i class="bi bi-quote quote-icon-left"></i>
+                                {{ review.review }}
+                                <i class="bi bi-quote quote-icon-right"></i>
+                            </p>
+                        </div>
+                    </div>
+                </div><!-- End testimonial item -->
+                {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+
+    </div>
+</section>
+{% endif %}
  
 </main>
 <script>

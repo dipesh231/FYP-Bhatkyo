@@ -2436,91 +2436,111 @@ section {
   margin-top: 150px;
 
 }
+
 .productDetail {
-  margin-top: 150px;
+  margin-top: 50px;
 }
-.productDetail .card{
+.productDetail .card {
   margin: auto;
-  max-width: 950px;
-  width: 70%;
+  width: 1000px;
   box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-radius: 1rem;
   border: transparent;
 }
-@media(max-width:767px){
-  .card{
-      margin: 3vh auto;
+
+@media(max-width:767px) {
+  .productDetail .card {
+    margin: 3vh auto;
   }
 }
-.productDetail .cart{
+
+.productDetail .cart {
   background-color: white;
   padding: 4vh 5vh;
   border-bottom-left-radius: 1rem;
   border-top-left-radius: 1rem;
 }
-@media(max-width:767px){
-.productDetail .cart{
-      padding: 4vh;
-      border-bottom-left-radius: unset;
-      border-top-right-radius: 1rem;
+
+@media(max-width:767px) {
+  .productDetail .cart {
+    padding: 4vh;
+    border-bottom-left-radius: unset;
+    border-top-right-radius: 1rem;
   }
 }
-.productDetail .summary{
+
+.productDetail .summary {
   background-color: #ddd;
   border-top-right-radius: 1rem;
   border-bottom-right-radius: 1rem;
   padding: 4vh;
   color: rgb(65, 65, 65);
 }
-@media(max-width:767px){
-.productDetail .summary{
-  border-top-right-radius: unset;
-  border-bottom-left-radius: 1rem;
+
+@media(max-width:767px) {
+  .productDetail .summary {
+    border-top-right-radius: unset;
+    border-bottom-left-radius: 1rem;
   }
 }
-.productDetail .summary .col-2{
+
+.productDetail .summary .col-2 {
   padding: 0;
 }
-.productDetail .summary .col-10
-{
+
+.productDetail .summary .col-10 {
   padding: 0;
-}.productDetail .row{
+}
+
+.productDetail .row {
   margin: 0;
 }
-.productDetail .title b{
+
+.productDetail .title b {
   font-size: 1.5rem;
 }
-.productDetail .main{
+
+.productDetail .main {
   margin: 0;
   padding: 2vh 0;
   width: 100%;
 }
-.productDetail .col-2, .col{
+
+.productDetail .col-2,
+.col {
+  padding: 0 0vh;
+}
+
+.productDetail a {
   padding: 0 1vh;
 }
-.productDetail a{
-  padding: 0 1vh;
-}
-.productDetail .close{
+
+.productDetail .close {
   margin-left: auto;
   font-size: 0.7rem;
 }
-.productDetail img{
+
+.productDetail img {
   width: 3.5rem;
 }
-.productDetail .back-to-shop{
+
+.productDetail .back-to-shop {
   margin-top: 4.5rem;
 }
-.productDetail h5{
+
+.productDetail h5 {
   margin-top: 4vh;
 }
-.productDetail hr{
+
+.productDetail hr {
   margin-top: 1.25rem;
 }
-.productDetail form{
+
+.productDetail form {
   padding: 2vh 0;
 }
-.productDetail select{
+
+.productDetail select {
   border: 1px solid rgba(0, 0, 0, 0.137);
   padding: 1.5vh 1vh;
   margin-bottom: 4vh;
@@ -2528,7 +2548,8 @@ section {
   width: 100%;
   background-color: rgb(247, 247, 247);
 }
-.productDetail input{
+
+.productDetail input {
   border: 1px solid rgba(0, 0, 0, 0.137);
   padding: 1vh;
   margin-bottom: 4vh;
@@ -2536,11 +2557,12 @@ section {
   width: 100%;
   background-color: rgb(247, 247, 247);
 }
-.productDetail input:focus::-webkit-input-placeholder
-{
-    color:transparent;
+
+.productDetail input:focus::-webkit-input-placeholder {
+  color: transparent;
 }
-.productDetail .btn{
+
+.productDetail .btn {
   background-color: #000;
   border-color: #000;
   color: white;
@@ -2550,27 +2572,32 @@ section {
   padding: 1vh;
   border-radius: 0;
 }
-.productDetail .btn:focus{
+
+.productDetail .btn:focus {
   box-shadow: none;
   outline: none;
   box-shadow: none;
   color: white;
   -webkit-box-shadow: none;
   -webkit-user-select: none;
-  transition: none; 
+  transition: none;
 }
-.productDetail .btn:hover{
+
+.productDetail .btn:hover {
   color: white;
 }
-.productDetail a{
-  color: black; 
+
+.productDetail a {
+  color: black;
 }
-.productDetail a:hover{
+
+.productDetail a:hover {
   color: black;
   text-decoration: none;
 }
-.productDetail #code{
-  background-image: linear-gradient(to left, rgba(255, 255, 255, 0.253) , rgba(255, 255, 255, 0.185)), url("https://img.icons8.com/small/16/000000/long-arrow-right.png");
+
+.productDetail #code {
+  background-image: linear-gradient(to left, rgba(255, 255, 255, 0.253), rgba(255, 255, 255, 0.185)), url("https://img.icons8.com/small/16/000000/long-arrow-right.png");
   background-repeat: no-repeat;
   background-position-x: 95%;
   background-position-y: center;

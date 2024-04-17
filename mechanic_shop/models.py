@@ -23,9 +23,7 @@ class Shop(models.Model):
     VERIFICATION_STATUS_CHOICES = (
         ('pending', 'Pending'),
         ('verified', 'Verified'),
-    )
-    verification_status = models.CharField(max_length=20, choices=VERIFICATION_STATUS_CHOICES, default='pending')
-    
+    )    
     vehicle_choices = (
         ('two_wheelers', 'Two Wheelers'),
         ('four_wheelers', 'Four Wheelers'),

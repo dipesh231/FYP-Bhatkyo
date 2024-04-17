@@ -1,13 +1,13 @@
 {% load static %}
-{% if user_profile.profile_picture.url %}
+{% if user_profile.profile_picture %}
 <div class="breadcrumbs d-flex align-items-center" style="background-image: url({{user_profile.profile_picture.url }});">
     {% else %}
-    <div class="breadcrumbs d-flex align-items-center" style="background-image: url({% static "images/hero_3.jpg" %} );">
+<div class="breadcrumbs d-flex align-items-center" style="background-image: url({% static "images/hero_3.jpg" %} );">
     {% endif %}
     <div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
         <div class = "img-holder" style="float: left;">
             <figure>
-                {% if user_profile.profile_picture.url %}
+                {% if user_profile.profile_picture %}
                 <img src = "{{ user_profile.profile_picture.url }}" width="70" height="70" >
                 {% else %}
                 <img src = "{% static "images/hero_3.jpg" %}" width="70" height="70" >

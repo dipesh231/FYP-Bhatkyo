@@ -1,12 +1,14 @@
 {% load static %}
+
 <div class="breadcrumbs d-flex align-items-center" style="background-image: url({{shop.shop_image.url }});">
     <div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
         <div class = "img-holder" style="float: left;">
             <figure>
-                {% if shop.profile_picture.url %}
-                    <img src = "{{ shop.profile_picture.url }}" width="70" height="70" >
+                {% if user_profile.profile_picture %}
+                <img src = "{{ user_profile.profile_picture.url }}" width="70" height="70" >
                 {% else %}
                 <img src = "{% static "images/hero_3.jpg" %}" width="70" height="70" >
+
                 {% endif %}
             </figure>
         </div>

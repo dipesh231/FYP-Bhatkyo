@@ -35,10 +35,11 @@
                     <div class="form-group">
                         <label class="label" for="vehicles">Vehicles</label><br>
                         {% for value, label in shop.vehicle_choices %}
-                            <input type="radio" id="{{ value }}" name="vehicles" value="{{ value }}">
+                            <input type="radio" id="{{ value }}" name="vehicles" value="{{ value }}" {% if value == form.initial.vehicles %} checked {% endif %} readonly>
                             <label for="{{ value }}">{{ label }}</label><br>
                         {% endfor %}
                     </div>
+                    
                     <div class="form-group">
                         <label class="label" for="problem_description">Problem Description</label>
                         <textarea class="form-control" id="id_problem_description" name="problem_description" placeholder="Problem Description" required></textarea>
@@ -143,4 +144,69 @@
         });
     });
 </script>
+{% if shop_reviews %}
+<section id="testimonials" class="testimonials section-bg">
+    <div class="container" data-aos="fade-up">
+        <div class="section-header">
+            <h2>Reviews</h2>
+            <p>Our Happy Customers</p>
+        </div>
+
+        <div class="slides-2 swiper">
+            <div class="swiper-wrapper">
+                
+                {% for review in shop_reviews %}
+                <div class="swiper-slide">
+                    <div class="testimonial-wrap">
+                        <div class="testimonial-item">
+                            <!-- Display the reviewer's profile picture -->
+                            <img src="{{ review.user.userprofile.profile_picture.url }}" class="testimonial-img" alt="Profile Picture">
+                            <!-- Display the reviewer's name -->
+                            <h3>{{ review.user.name }}</h3>
+                            <h3>{{ review.book_service.shop.shop_name}}</h3>
+                            {% if review.book_service.services %}
+                            {% for service in review.book_service.services.all %}
+                                {% if service.name %}
+                                    <h4>{{ service.name }}</h4>
+                                {% else %}
+                                    <p>No service name available</p>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <p>No services booked</p>
+                        {% endif %}
+                                                    
+                            <div class="stars">
+                                {% if review.rating %}
+                                    {% for _ in "x"|ljust:5 %}
+                                        {% if forloop.counter <= review.rating %}
+                                            <i class="bi bi-star-fill"></i> <!-- Fills a star -->
+                                        {% else %}
+                                            <i class="bi bi-star"></i> <!-- Empty star -->
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    <p>No rating available</p> <!-- If there's no rating -->
+                                {% endif %}
+                            </div>
+                            
+                            
+                            
+                            <!-- Display the review text -->
+                            <p>
+                                <i class="bi bi-quote quote-icon-left"></i>
+                                {{ review.review }}
+                                <i class="bi bi-quote quote-icon-right"></i>
+                            </p>
+                        </div>
+                    </div>
+                </div><!-- End testimonial item -->
+                {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+
+    </div>
+</section>
+{% endif %}
 {% endblock %}

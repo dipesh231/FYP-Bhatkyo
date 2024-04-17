@@ -39,6 +39,15 @@ class RateBooking(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     book_service = models.ForeignKey(BookService, on_delete=models.CASCADE, null=True)
     review = models.CharField(max_length = 100, null = True)
+    RATING_CHOICES = (
+        (1, '1 star'),
+        (2, '2 stars'),
+        (3, '3 stars'),
+        (4, '4 stars'),
+        (5, '5 stars'),
+    )
+    rating = models.IntegerField(choices=RATING_CHOICES, default=5)  # Default to 5 stars
+
 
     def __str__(self):
         return self.user.name
@@ -47,7 +56,8 @@ class Invoice(models.Model):
     booking = models.OneToOneField(BookService, on_delete=models.CASCADE, related_name='invoice')
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
-    
+    payment_status = models.CharField(max_length=20, choices=[('Unpaid', 'Unpaid'), ('Paid', 'Paid')], default='Unpaid')
+
 class InvoiceService(models.Model):
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
     service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, blank=True)

@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
-
 {% load static %}
 
 {% block content %}
+{% include 'includes/alerts.html' %}
+{% include 'includes/cover.html' %}
 <section id="blog" class="blog">
 
 <h1>List of roooms</h1>
@@ -13,3 +14,4 @@
 {% endfor %}
 </section>
 {% endblock %}
+

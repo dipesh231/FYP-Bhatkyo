@@ -40,11 +40,17 @@
                                             <label class="label" for="id_longitude"> Longitude</label>
                                             <input type="text" class="form-control" id="id_longitude" name="longitude" placeholder="Longitude" value="{{ profile_form.instance.longitude }}">
                                         </div>
-                                    </div>
-                                    <div class="col-lg-8 col-md-8">
-                                        <div id="map" style="height: 300px;"></div>
-                                    </div>
 
+                                        <div class="form-group">
+                                            <label class="label" for="id_profile_picture">Profile Picture</label><br>
+                                            {% if profile_form.instance.profile_picture %}
+                                                <img src="{{ profile_form.instance.profile_picture.url }}" style="max-width: 100px; max-height: 100px;">
+                                            {% else %}
+                                                <p>No profile picture available.</p>
+                                                <input type="file" name="profile_picture" id="id_profile_picture">
+                                            {% endif %}
+                                        </div>
+                                    </div>
                                     <div class="col-lg-4 col-md-4">
                                         <div class="form-group">
                                             <label class="label">Vehicles</label><br>
@@ -62,21 +68,9 @@
                                                 {% endfor %}
                                             </div>
                                         </div>
-                                    </div>
-                                    
-                                    <!-- Third Column -->
-                                    <div class="col-lg-4 col-md-4">
-                                        <!-- Vehicle Choices -->
-
-                                        <div class="form-group">
-                                            <label class="label" for="id_shop_image">Update profile Image</label><br>
-                                            <img src="{{ profile_form.instance.profile_picture.url }}" style="max-width: 100px; max-height: 100px;">
-
-                                            {{ profile_form.profile_picture }}
-                                        </div><br>
-                                        <div class="form-group">
-                                            <label class="label" for="id_shop_license">Update License</label><br>
-                                            <img src="{{ shop_form.instance.shop_image.url }}" alt="Shop License" style="max-width: 100px; max-height: 100px;">
+                                                                <div class="form-group">
+                                            <label class="label" for="id_shop_license">Update Shop Image</label><br>
+                                            <img src="{{ shop_form.instance.shop_image.url }}" alt="Shop Image" style="max-width: 100px; max-height: 100px;">
                                             {{ shop_form.shop_image }}
                                         </div><br>
                                         <div class="form-group">
@@ -86,10 +80,15 @@
                                             {{ shop_form.shop_lisence }}
                                         </div>
                                     </div>
+                                    <div class="col-lg-4 col-md-4">
+                                        <div id="map" style="height: 300px;"></div>
+                                    </div>
+                                    </div>
+                                    
                                 </div>
                                 <br>
                                 <div class="form-group">
-                                    <button type="submit" value = "Update Shop" class="btn1 btn-primary rounded submit px-9">Update Shop</button>
+                                    <button type="submit" value="Update Shop" class="btn1 btn-primary rounded submit px-9">Update Shop</button>
                                 </div>
                             </form>
                         </div>
@@ -98,43 +97,34 @@
             </div>
         </div>
     </div>
-</section><!-- Include Leaflet JavaScript -->
+</section>
+
+<!-- Include Leaflet JavaScript -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
-    // Initialize Leaflet map
     document.addEventListener("DOMContentLoaded", function () {
         var latitude = parseFloat('{{ profile_form.instance.latitude }}');
         var longitude = parseFloat('{{ profile_form.instance.longitude }}');
 
-        var map = L.map('map').setView([latitude, longitude], 8); // Shop's coordinates and initial zoom level
+        var map = L.map('map').setView([latitude || 0, longitude || 0], 8); // Default to (0, 0) if latitude and longitude are not available
 
-        // Add tile layer (you may use a different tile layer provider)
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Add marker with drag and drop functionality
-        var marker = L.marker([latitude, longitude], { draggable: true }).addTo(map);
+        var marker = L.marker([latitude || 0, longitude || 0], { draggable: true }).addTo(map); // Add a marker to the map at the provided latitude and longitude, defaulting to (0, 0) if not available
 
-        // Update marker position on dragend event
         marker.on('dragend', function (event) {
             var position = marker.getLatLng();
-            console.log('New marker position:', position.lat, position.lng);
-            // Update latitude and longitude fields with the new coordinates
             document.getElementById('id_latitude').value = position.lat;
             document.getElementById('id_longitude').value = position.lng;
-
-            // Perform reverse geocoding to fetch the address
             fetchAddress(position.lat, position.lng);
         });
 
-        // Update address and marker position when the user clicks on the map
         map.on('click', function (e) {
             marker.setLatLng(e.latlng);
             document.getElementById('id_latitude').value = e.latlng.lat;
             document.getElementById('id_longitude').value = e.latlng.lng;
-
-            // Perform reverse geocoding to fetch the address
             fetchAddress(e.latlng.lat, e.latlng.lng);
         });
 
@@ -149,6 +139,70 @@
                     console.error('Error fetching address:', error);
                 });
         }
+
+        // Fetch address for initial marker position
+        fetchAddress(latitude || 0, longitude || 0);
     });
 </script>
+<section id="testimonials" class="testimonials section-bg">
+    <div class="container" data-aos="fade-up">
+        <div class="section-header">
+            <h2>Reviews</h2>
+            <p>Our Happy Customers</p>
+        </div>
+
+        <div class="slides-2 swiper">
+            <div class="swiper-wrapper">
+                {% for review in shop_reviews %}
+                <div class="swiper-slide">
+                    <div class="testimonial-wrap">
+                        <div class="testimonial-item">
+                            <!-- Display the reviewer's profile picture -->
+                            <img src="{{ review.user.userprofile.profile_picture.url }}" class="testimonial-img" alt="Profile Picture">
+                            <!-- Display the reviewer's name -->
+                            <h3>{{ review.user.name }}</h3>
+                            {% if review.book_service.services %}
+                            {% for service in review.book_service.services.all %}
+                                {% if service.name %}
+                                    <h4>{{ service.name }}</h4>
+                                {% else %}
+                                    <p>No service name available</p>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <p>No services booked</p>
+                        {% endif %}
+                                                    
+                            <div class="stars">
+                                {% if review.rating %}
+                                    {% for _ in "x"|ljust:5 %}
+                                        {% if forloop.counter <= review.rating %}
+                                            <i class="bi bi-star-fill"></i> <!-- Fills a star -->
+                                        {% else %}
+                                            <i class="bi bi-star"></i> <!-- Empty star -->
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    <p>No rating available</p> <!-- If there's no rating -->
+                                {% endif %}
+                            </div>
+                            
+                            
+                            
+                            <!-- Display the review text -->
+                            <p>
+                                <i class="bi bi-quote quote-icon-left"></i>
+                                {{ review.review }}
+                                <i class="bi bi-quote quote-icon-right"></i>
+                            </p>
+                        </div>
+                    </div>
+                </div><!-- End testimonial item -->
+                {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+
+    </div>
+</section>
 {% endblock %}

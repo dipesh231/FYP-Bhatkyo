@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from Accounts.forms import UserInfoForm, UserProfileForm
 from Accounts.models import UserProfile
 from Accounts.views import check_role_customer
-from bookings.models import BookService
+from bookings.models import BookService, Invoice, InvoiceProduct, InvoiceService
 
 # Create your views here.
 
@@ -46,3 +46,44 @@ def myBookings(request):
         'current_page': "Bookings",
     }
     return render(request, 'customers/myBookings.html', context)
+
+def my_booking_details(request, booking_id):
+    booking = get_object_or_404(BookService, id=booking_id)
+    shop = booking.shop
+    return render(request, 'customers/booking_details.html', {'booking': booking, 'shop':shop})
+
+
+def view_invoice_detail(request, invoice_id):
+    invoice = Invoice.objects.get(id=invoice_id)
+    invoice_products = InvoiceProduct.objects.filter(invoice=invoice)
+    
+    # Calculate service total
+    service_total = 0
+    invoice_services = InvoiceService.objects.filter(invoice=invoice)
+    for invoice_service in invoice_services:
+        service_total += invoice_service.get_total_price()
+
+    # Calculate product total
+    product_total = 0
+    for invoice_product in invoice_products:
+        invoice_product.total = invoice_product.product.price * invoice_product.quantity
+        product_total += invoice_product.total
+    
+    context = {
+        'invoice': invoice,
+        'invoice_products': invoice_products,
+        'invoice_services':invoice_services,
+        'product_total': product_total,
+        'service_total': service_total
+    }
+
+    return render(request, 'customers/my_invoice_detail.html', context)
+
+def mark_as_paid(request, invoice_id):
+    invoice = get_object_or_404(Invoice, id=invoice_id)
+    if request.method == 'POST':
+        invoice.payment_status = 'Paid'
+        invoice.save()
+        # Redirect to the invoice detail page
+        return redirect('view_invoice_detail', invoice_id=invoice_id)
+    return redirect('view_invoice_detail', invoice_id=invoice_id)  # Redirect back to invoice detail page if not POST request

@@ -5,65 +5,54 @@
 
 {% block content %}
 {% include 'customers/cover.html' %}
-
-
-<div class="productDetail">
- <div class="card">
+<div class ="productDetail">
+<div class="card">
     <div class="row">
         <div class="col-md-8 cart">
             <div class="title">
                 <div class="row">
                     <div class="col"><h4><b>Shopping Cart</b></h4></div>
-                    <div class="col align-self-center text-right text-muted"> items</div>
+                    <div class="col align-self-center text-right text-muted">ITEMS: {{ request.session.cart.items|length }}</div>
                 </div>
-            </div> 
-             
-            <div class="row border-top border-bottom">
-                {% for key,value in request.session.cart.items %}  
-                <div class="row main align-items-center">
-                    <div class="col-2"><img class="img-fluid" src="{{value.product_image}}"></div>
-                    <div class="col">
-                        {{value.product_name}}
-                    </div>
-                    <div class="col">
-                        <a href="{% url 'item_decrement' value.product_id %}">-</a><a href="#" class="border">{{value.quantity}}</a><a href="{% url 'item_increment' value.product_id %}">+</a>
-                    </div>
-                    
-                    <div class="col">
-                        <div class="row">Rs.{{value.price}}</div>
-                    </div>
-                    <div class="col">
-                        <div class="row">Rs.{{ value.price|multiply:value.quantity }}</div>
-                    </div>
-                    <div class = "col">
-                        <span class="close"><a href = "{% url 'item_clear' key %}">&#10005;</span></div>
-                </div>
-                {% endfor %}
             </div>
-            <a href = "{% url 'cart_clear' %}" class="btn">CLEAR CART</a>
+            {% for key, value in request.session.cart.items %}
+
+            <div class="row border-top border-bottom">
+                <div class="row main align-items-center">
+                    <div class="col"><img class="img-fluid" src="{{ value.product_image }}"></div>
+                    <div class="col">
+                        <div class="row">Shop: {{ value.product_shop }}</div> <!-- Display shop name -->
+
+                        <div class="row">{{ value.product_name }}</div>
+                    </div>
+                    <div class="col">
+                        <a href="{% url 'item_decrement' value.product_id %}">-</a><a href="#" class="border">{{ value.quantity }}</a><a href="{% url 'item_increment' value.product_id %}">+</a>
+                    </div>
+                    <div class="col">Rs. {{ value.price }}</div>
+                    <div class="col">Rs. {{ value.price|multiply:value.quantity }}</div>
+                    <div class="col"><a href="{% url 'item_clear' key %}" class="text-muted"><i class="fas fa-times"></i></a></div>
+
+                </div>
+            </div>
+
+            {% endfor %}
             <div class="back-to-shop"><a href="{% url 'index' %}">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
         </div>
         <div class="col-md-4 summary">
             <div><h5><b>Summary</b></h5></div>
             <hr>
             <div class="row">
-                <div class="col" style="padding-left:0;">ITEMS</div>
-                <div class="col text-right">Rs. {{cart_total_amount}}</div>
+                <div class="col" style="padding-left:0;">ITEMS: {{ request.session.cart.items|length }}</div>
+                <div class="col text-right">Rs. {{ cart_total_amount }}</div>
             </div>
-            {% comment %} <form>
-                <p>SHIPPING</p>
-                <select><option class="text-muted">Standard-Delivery- &Rs;5.00</option></select>
-                <p>GIVE CODE</p>
-                <input id="code" placeholder="Enter your code">
-            </form> {% endcomment %}
+            
             <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
-                <div class="col">TOTAL PRICE : Rs. {{cart_total_amount}}</div>
+                <div class="col">TOTAL PRICE</div>
+                <div class="col text-right">Rs. {{ cart_total_amount }}</div>
             </div>
             <a href={% url "init"  %} ><button id="checkout-button" class="btn">CHECKOUT</button></a>
         </div>
     </div>
-    
 </div>
-
-
-{% endblock content %}
+</div>
+{% endblock  %}

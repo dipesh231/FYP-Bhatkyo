@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% include 'includes/alerts.html' %}
+    {% include 'customers/cover.html' %}
+
+    <section id="invoice-details" class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <!-- Sidebar -->
+                {% include 'includes/c_sidebar.html' %}
+            </div>
+            <div class="col-md-9">
+                <!-- Invoice Details -->
+                <div class="user-dashboard">
+                    <div class="user-holder">
+                        <h2 class="mb-4 text-center">Invoice Details</h2>
+
+                        <!-- User Details -->
+                        <div class="mb-3 row">
+                            <div class="col-md-6">
+                                <h4>User Details</h4>
+                                <p>User Name: {{ invoice.booking.user.username }}</p>
+                                <p>Email: {{ invoice.booking.user.email }}</p>
+                                <p>Phone Number: {{ invoice.booking.user.phone_number }}</p>
+                                <p>Address: {{ invoice.booking.location }}</p>
+
+
+                                <!-- Add more user details here -->
+                            </div>
+                            <div class="col-md-6">
+                                <h4>Shop Details</h4>
+                                <p>Shop Name: {{ invoice.booking.shop.shop_name }}</p>
+                                <p>Email {{ invoice.booking.shop.user.email}}</p>
+                                <p>Phone Number: {{ invoice.booking.shop.user.phone_number }}</p>
+                                <p>Address: {{ invoice.booking.shop.user_profile.address}}</p>
+
+
+                                <!-- Add more shop details here -->
+                            </div>
+                        </div>
+                        <h3 class="mb-4 text-center">Booking ID: {{ invoice.booking.id }}</h3>
+                        <!-- Service Details -->
+                        <div class="mb-3">
+                            <h4>Service Details</h4>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="row">Service Name</th>
+                                            <th scope="row">Service Hours Used</th>
+                                            <th scope="row">Per Hour Price</th>
+                                            <th scope="row">Service Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for invoice_service in invoice_services %}
+                                            <tr>
+                                                <td>{{ invoice_service.service.name }}</td>
+                                                <td>{{ invoice_service.hours }}</td>
+                                                <td>{{ invoice_service.service.price }}</td>
+                                                <td>{{ invoice_service.get_total_price }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                        </div>
+                        <!-- Product Details -->
+                        <div class="mb-3">
+                            <h4>Product Details</h4>
+                            <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Product</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for invoice_product in invoice_products %}
+                                        <tr>
+                                            <td>{{ invoice_product.product.product_name }}</td>
+                                            <td>{{ invoice_product.product.price }}</td>
+                                            <td>{{ invoice_product.quantity }}</td>
+                                            <td>{{ invoice_product.total }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        </div>
+                        <!-- Total Details -->
+                        <div class="mb-3">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row" colspan="3">Product Total</th>
+                                        <td>{{ product_total }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" colspan="3">Service Total</th>
+                                        <td>{{ service_total }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" colspan="3">Grand Total</th>
+                                        <td>{{ invoice.total_amount }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mb-3">
+                            <h4>Payment Status</h4>
+                            {% if invoice.payment_status == 'Unpaid' %}
+                                <p>Status: Unpaid</p>
+                                <form method="post" action="{% url 'mark_as_paid' invoice.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary">Mark as Paid</button>
+                                </form>
+                            {% else %}
+                                <p>Status: Paid</p>
+                            {% endif %}
+                        </div>   
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

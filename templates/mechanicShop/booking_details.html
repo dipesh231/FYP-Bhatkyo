@@ -108,7 +108,7 @@
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                     </form>
                                 {% elif booking.status in 'Accepted, In Progress' %}
-                                    <form method="post" action="{% url 'update_booking_status' %}">
+                                <form method="post" action="{% url 'update_booking_status' %}">
                                         {% csrf_token %}
                                         <div class="form-group">
                                             <input type="hidden" name="booking_id" value="{{ booking.id }}">
@@ -118,7 +118,7 @@
                                             </select>
                                         </div><br>
                                         <button type="submit" class="btn btn-primary">Submit</button>
-                                    </form>
+                                    </form>    
                                 {% elif booking.status in 'Rejected' %}
                                 <div class="col-md-6 mt-3">
                                     <form method="post" action="{% url 'delete_booking' booking.id %}">

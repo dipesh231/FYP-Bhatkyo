@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 # Create your models here.
 from django.db.models.fields.related import OneToOneField
@@ -32,7 +32,7 @@ class UserManager(BaseUserManager):
         user.is_superadmin = True
         user.save(using = self._db)
         return user
-class User(AbstractBaseUser):
+class User(AbstractBaseUser,PermissionsMixin):
     MECHANIC_SHOP = 1
     CUSTOMER = 2
 
@@ -45,9 +45,6 @@ class User(AbstractBaseUser):
     email = models.EmailField(max_length = 100, unique = True)
     phone_number = models.CharField(max_length = 12, blank = True)
     role = models.PositiveSmallIntegerField(choices = ROLE_CHOICE, blank = True, null = True)
-
-    #required fields
-
     date_joined = models.DateTimeField(auto_now_add = True)
     last_login = models.DateTimeField(auto_now_add = True)
     created_date = models.DateTimeField(auto_now_add = True)

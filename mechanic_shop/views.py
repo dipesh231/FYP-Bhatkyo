@@ -5,9 +5,10 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from Accounts.forms import UserForm, UserProfileForm
 from Accounts.models import User, UserProfile
 from Accounts.views import check_role_shop
+from chatapp.models import ChatRoom
 from products.forms import ProductForm
 from products.models import Product
-from bookings.models import BookService
+from bookings.models import BookService, RateBooking
 from mechanic_shop.forms import  ShopForm
 from mechanic_shop.models import Service, Shop
 @login_required(login_url='login')
@@ -17,6 +18,8 @@ def Sprofile(request):
     shop = get_object_or_404(Shop, user=request.user)
     vehicle_choices = Shop._meta.get_field('vehicles').choices
     services = Service.objects.all()
+    shop_reviews = RateBooking.objects.filter(book_service__shop=shop)
+
 
     if request.method == 'POST':
         profile_form = UserProfileForm(request.POST, request.FILES, instance=profile)
@@ -24,7 +27,7 @@ def Sprofile(request):
         if profile_form.is_valid() and shop_form.is_valid():
             # Save the profile and shop forms
             profile_form.save()
-            shop = shop_form.save(commit=False)
+            shop_form.save()
             
             # Update latitude and longitude fields
             latitude = request.POST.get('latitude')
@@ -58,6 +61,7 @@ def Sprofile(request):
         'shop': shop,
         'services': services,
         'vehicle_choices': vehicle_choices,
+        'shop_reviews': shop_reviews,
     }
     return render(request, 'mechanicShop/sprofile.html', context)
 
@@ -112,13 +116,6 @@ def edit_product(request, product_id):
                 shop = get_object_or_404(Shop, user=request.user)
                 updated_product = form.save(commit=False)
                 updated_product.user = shop
-
-                # Get the quantity from the form
-                new_quantity = form.cleaned_data['total_quantity']
-                
-                # Add the new quantity to the existing quantity
-                updated_product.total_quantity += new_quantity
-
                 updated_product.save()
                 return redirect('product_detail', product_id=product_id)
             else:
@@ -145,12 +142,11 @@ def delete_product(request, product_id):
 @user_passes_test(check_role_shop)
 def Bookings(request):
     shop = Shop.objects.get(user=request.user)
-    bookings = BookService.objects.filter(shop=shop)
-    bookings = BookService.objects.order_by('-date')
+    bookings = BookService.objects.filter(shop=shop).order_by('-date')
     for booking in bookings:
         booking.selected_services = booking.services.all() 
     context = {
-        'shop':shop,
+        'shop': shop,
         'bookings': bookings,
         'current_page': "Bookings",
     }

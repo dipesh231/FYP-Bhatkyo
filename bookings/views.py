@@ -1,13 +1,14 @@
 from datetime import datetime
 from decimal import Decimal
 import math
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from Accounts.views import check_role_customer
 from products.models import Product
 from .models import Invoice, InvoiceProduct, InvoiceService, RateBooking, BookService
-from .forms import BookServiceForm
+from .forms import BookServiceForm, RateBookingForm
 from django.shortcuts import render
 from mechanic_shop.models import Service, Shop
 from django.db.models import F
@@ -26,12 +27,14 @@ def nearby_shops(request):
         longitude = float(request.POST.get('longitude'))
         selected_services_ids = request.POST.getlist('services')
         radius = int(request.POST.get('radius'))
+        selected_vehicle = request.POST.get('vehicles')
 
         # Store selected services IDs and radius in session
         request.session['selected_services_ids'] = selected_services_ids
         request.session['latitude'] = latitude
         request.session['longitude'] = longitude
         request.session['radius'] = radius
+        request.session['selected_vehicle'] = selected_vehicle 
 
         # Convert radius to degrees
         radius_degrees = radius / 111  # 1 degree is approximately 111 kilometers
@@ -48,8 +51,10 @@ def nearby_shops(request):
             user_profile__latitude__isnull=False,
             user_profile__longitude__isnull=False,
             user_profile__latitude__range=(latitude_min, latitude_max),
-            user_profile__longitude__range=(longitude_min, longitude_max)
+            user_profile__longitude__range=(longitude_min, longitude_max),
         )
+
+        nearby_shops = nearby_shops.filter(Q(vehicles__icontains=selected_vehicle) | Q(vehicles='both'))
 
          # If only one service is selected, filter shops to include only those that offer that service
         if len(selected_services_ids) == 1:
@@ -64,13 +69,15 @@ def nearby_shops(request):
 @user_passes_test(check_role_customer)
 def book_service(request, shop_id):
     shop = Shop.objects.get(pk=shop_id)
+    shop_reviews = RateBooking.objects.filter(book_service__shop=shop)
+
     current_date = datetime.now().strftime('%Y-%m-%dT%H:%M')
 
     user_id = request.user.id if request.user.is_authenticated else None
     selected_services_ids = request.session.get('selected_services_ids', [])
     latitude = request.session.get('latitude')
     longitude = request.session.get('longitude')
-
+    selected_vehicle = request.session.get('selected_vehicle')
     selected_services = Service.objects.filter(pk__in=selected_services_ids)
 
     if request.method == 'POST':
@@ -83,6 +90,7 @@ def book_service(request, shop_id):
             book_service.longitude = longitude
             book_service.location = request.POST.get('location')
             book_service.time = request.POST.get('date')  # Assuming user selects date/time
+            book_service.vehicle = selected_vehicle
             book_service.save()
             book_service.services.set(selected_services)  # Assign selected_service here
             messages.success(request, 'Service booked successfully.')
@@ -91,10 +99,22 @@ def book_service(request, shop_id):
             print(form.errors)
             print(request.POST)
     else:
-        form = BookServiceForm(shop=shop, selected_services=selected_services)
+        initial_data = {'vehicles': selected_vehicle}
+        form = BookServiceForm(shop=shop, selected_services=selected_services, initial=initial_data)
 
-    return render(request, 'bookings/book_service.html', {'shop': shop, 'form': form, 'selected_services': selected_services, 'current_date': current_date})
+    return render(request, 'bookings/book_service.html', {'shop': shop, 'form': form, 'selected_services': selected_services, 'current_date': current_date, 'shop_reviews': shop_reviews})
 
+def delete_booking(request, booking_id):
+    booking = get_object_or_404(BookService, pk=booking_id)
+    
+   
+    if booking.user == request.user:
+        booking.delete()
+        messages.success(request, 'Booking deleted successfully.')
+    else:
+        messages.error(request, 'You are not authorized to delete this booking.')
+    
+    return redirect('myBookings') 
 
 def update_booking_status(request):
     if request.method == 'POST':
@@ -110,14 +130,18 @@ def update_booking_status(request):
 def rate_shop(request, booking_id):
     booking = get_object_or_404(BookService, pk=booking_id)
     if request.method == 'POST':
-        user = request.user
-        review_text = request.POST.get('review')
-        RateBooking.objects.create(user=user, book_service=booking, review=review_text)
-        return redirect('customerDashboard')  # Redirect to some page after submission
+        form = RateBookingForm(request.POST)
+        if form.is_valid():
+            rate_booking = form.save(commit=False)
+            rate_booking.book_service = booking
+            rate_booking.user = request.user
+            rate_booking.save()
+            return redirect('customerDashboard')  # Redirect to some page after submission
     else:
-        pass
+        form = RateBookingForm()
     context = {
-        'booking': booking
+        'booking': booking,
+        'form': form
     }
     return render(request, 'bookings/rate_booking.html', context)
 # views.py

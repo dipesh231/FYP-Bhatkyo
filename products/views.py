@@ -9,6 +9,7 @@ from cart.cart import Cart
 import requests
 
 from .models import ProductPayment
+from django.core.paginator import Paginator
 
 from Accounts.views import check_role_shop
 from mechanic_shop.models import Shop
@@ -16,6 +17,14 @@ from .models import Product
 from django.shortcuts import render, redirect
 from .forms import ProductForm
 
+
+def show_products(request):
+    products_list = Product.objects.all()  # Fetch all products
+    paginator = Paginator(products_list, 5)  # Show 10 products per page
+
+    page_number = request.GET.get('page')
+    products = paginator.get_page(page_number)
+    return render(request, 'products/products.html', {'products': products})
 
 @user_passes_test(check_role_shop)
 @login_required(login_url="login")
@@ -63,7 +72,6 @@ def cart_clear(request):
     cart.clear()
     return redirect("cart_detail")
 
-
 @login_required(login_url="login")
 def cart_detail(request):
     return render(request, 'cart/cart_detail.html')
@@ -72,7 +80,7 @@ def cart_detail(request):
 def initkhalti(request):
     url = "https://a.khalti.com/api/v2/epayment/initiate/"
 
-    return_url = 'http://localhost:8000'
+    return_url = 'http://localhost:8000/products/verify/'
     website_url = 'http://localhost:8000'
   
     user_obj=request.user
@@ -99,7 +107,7 @@ def initkhalti(request):
              'shop': shop
         }
         product_info.append(product_infos)
-    print(product_info)
+   
    
     total_bill = 0
     for key, value in request.session['cart'].items():
@@ -109,11 +117,7 @@ def initkhalti(request):
     cart_total_amount=total_bill		
     purchase_order_id = str(uuid.uuid4())  # Generating UUID for purchase order ID
     
-    print("url", url)
-    print("return_url", return_url)
-    print("web_url", website_url)
-    print("amount", cart_total_amount)
-    print("purchase_order_id", purchase_order_id)
+   
     payload = json.dumps({
         "return_url": return_url,
         "website_url": website_url,
@@ -134,15 +138,12 @@ def initkhalti(request):
     }
 
     response = requests.request("POST", url, headers=headers, data=payload)
-    print(json.loads(response.text))
 
-    print(response.text)
     new_res = json.loads(response.text)
     # print(new_res['payment_url'])
-    print(type(new_res))
+   
     return redirect(new_res['payment_url'])
   
-
 def verifyKhalti(request):
     url = "https://a.khalti.com/api/v2/epayment/lookup/"
     if request.method == 'GET':
@@ -152,27 +153,25 @@ def verifyKhalti(request):
         }
         pidx = request.GET.get('pidx')
         data = json.dumps({
-            'pidx':pidx
+            'pidx': pidx
         })
-        res = requests.request('POST',url,headers=headers,data=data)
-        print(res)
-        print(res.text)
+        res = requests.request('POST', url, headers=headers, data=data)
 
         new_res = json.loads(res.text)
         print(new_res)
 
-        user_obj=request.user
+        user_obj = request.user
         cart = Cart(request)
-        product_info=[]
-        products=[]
+        product_info = []
+        products = []
 
-        for key,value in request.session.get('cart', {}).items():
+        for key, value in request.session.get('cart', {}).items():
             product = Product.objects.get(pk=key)
             products.append(key)
-            shop_id= product.user.id
-            shop=Shop.objects.get(pk=shop_id)
+            shop_id = product.user.id
+            shop = Shop.objects.get(pk=shop_id)
             product_infos = {
-                'id':product.pk,
+                'id': product.pk,
                 'name': product.product_name,
                 'price': product.price,
                 'quantity': value['quantity'],
@@ -180,22 +179,23 @@ def verifyKhalti(request):
             }
             product_info.append(product_infos)
         print(product_info)
+
         total_bill = 0
-    for key, value in request.session['cart'].items():
-        total_bill += float(value['price']) * value['quantity']
-
+        for key, value in request.session['cart'].items():
+            total_bill += float(value['price']) * value['quantity']
+        print(new_res['status'])
         if new_res['status'] == 'Completed':
-           selected_products = Product.objects.filter(pk__in=products)
-           pay=ProductPayment.objects.create(user=request.user, amount=total_bill)
-           pay.product.set(selected_products)
-           pay.save()
-           print(pay)
-           print("Payment completed successfully!")
+            selected_products = Product.objects.filter(pk__in=products)
+            pay = ProductPayment.objects.create(user=request.user, amount=total_bill)
+            pay.product.set(selected_products)
+            pay.save()
+            print(pay)
+            print("Payment completed successfully!")
 
-           cart = Cart(request)
-           cart.clear()
-           messages.success("Payment Successful")  # Print message in terminal
-           return redirect('index')
+            cart = Cart(request)
+            cart.clear()
+            messages.success(request, "Payment Successful")  # Print message in terminal
+            return redirect('index')
             # If you want to display a message to the user, you can redirect to a page
             # or return an HTTP response with a message
     return redirect('index')

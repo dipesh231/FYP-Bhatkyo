@@ -19,30 +19,39 @@
                             <h2>My Bookings</h2>
                             <div class="row gy-4 posts-list">
                                 {% for booking in bookings %}
-                                    <div class="col-xl-5"> <!-- Adjusted to have two columns per row -->
-                                        <div class="post-item position-relative h-100">
-                                            <div class="post-content d-flex flex-column">
-                                                <h3 class="post-title">Shop Name: {{ booking.shop.shop_name }}</h3>
-                                                <p><strong>Selected Services:</strong></p>
-                                                <ul>
-                                                    {% for service in booking.selected_services.all %}
-                                                        <li>{{ service.name }}</li>
-                                                    {% empty %}
-                                                        <li>No services selected.</li>
-                                                    {% endfor %}
-                                                </ul>
-                                                <p><strong>Vehicle Type:</strong> {{ booking.vehicles }}</p>
-                                                <p><strong>Status:</strong> {{ booking.status }}</p>
-                                                <p><strong>Location:</strong> {{ booking.location }}</p>
-                                                <p><strong>Time:</strong> {{ booking.date }}</p>
-                                                <p><strong>Problem Description:</strong> {{ booking.problem_description }}</p>
-                                                <p><strong>Feedback:</strong> {{ booking.feedback }}</p>
-                                                <a href="{% url 'rate_shop' booking.id %}">Review</a>
-                                                <a href="{% url 'rooms' %}" class="btn btn-primary">Initiate Chat</a>
-                                                <hr>
+                                <div class="col-xl-7"> <!-- Adjusted to have two columns per row -->
+                                    <div class="post-item position-relative h-100">
+                                        <div class="post-content d-flex flex-column">
+                                            <h3 class="post-title">Shop Name: {{ booking.shop.shop_name }}</h3>
+                                            <p><strong>Selected Services:</strong></p>
+                                            <ul>
+                                                {% for service in booking.selected_services.all %}
+                                                    <li>{{ service.name }}</li>
+                                                {% empty %}
+                                                    <li>No services selected.</li>
+                                                {% endfor %}
+                                            </ul>
+                                            <p><strong>Vehicle Type:</strong> {{ booking.vehicles }}</p>
+                                            <p><strong>Status:</strong> {{ booking.status }}</p>
+                                            <p><strong>Location:</strong> {{ booking.location }}</p>
+                                            <p><strong>Time:</strong> {{ booking.date }}</p>
+                                            <p><strong>Problem Description:</strong> {{ booking.problem_description }}</p>
+                                            <p><strong>Feedback:</strong> {{ booking.feedback }}</p>
+                                            <a href="{% url 'rate_shop' booking.id %}">Review</a>
+                                            <div class="btn-group" role="group" aria-label="Booking Actions">
+                                                <a href="{% url 'rooms' %}" class="btn btn-success">Initiate Chat</a>
+                                                
+                                                <a href="{% url 'my_booking_details' booking.id %}" class="btn btn-warning">Details</a>
+                                                {% if booking.status == 'Pending' or booking.status == 'Completed' or booking.status == 'Rejected' %}
+                                                    <a href="{% url 'delete_booking' booking.id %}" class="btn btn-danger">Delete</a>
+                                                {% endif %}
                                             </div>
+                                            <hr>
                                         </div>
                                     </div>
+                                </div>
+                                
+                                
                                 {% endfor %}
                             </div>
                         </div>

@@ -56,10 +56,6 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label class="label" for="address">Address</label>
-                        <input type="text" class="form-control" id="id_address" name="address" placeholder="Address" required>
-                    </div>
-                    <div class="form-group col-md-6">
                         <label class="label" for="password">Password</label>
                         <input type="password" class="form-control" id="id_password" name="password" placeholder="Password" required>
                     </div>
@@ -67,10 +63,6 @@
                         <label class="label" for="confirm_password">Confirm Password</label>
                         <input type="password" class="form-control" id="id_confirm_password" name="confirm_password" placeholder="Confirm Password" required>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="label" for="id_profile_photo">Profile Photo</label>
-                    <input type="file" class="form-control-file" id="id_profile_photo" name="profile_photo" accept="image/*">
                 </div>
                 <!-- Error list is placed inside the form -->
                 <ul class="errorlist">
@@ -81,7 +73,6 @@
                             {% endfor %}
                         {% endif %}
                     {% endfor %}
-                    <li style="color: red;" class="text-decoration-none">{{form.non_field_errors}}</li>
                 </ul>
                 <div class="form-group">
                     <button type="submit" class="form-control btn1 btn-primary rounded submit px-3">Sign Up</button>

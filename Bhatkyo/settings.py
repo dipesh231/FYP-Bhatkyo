@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
     'customer',
     'chatapp',
     'channels',
+    
 
 ]
 
@@ -93,6 +95,7 @@ CHANNEL_LAYERS = {
         'BACKEND':'channels.layers.InMemoryChannelLayer'
     }
 }
+
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -166,3 +169,80 @@ MESSAGE_TAGS = {
 
 STRIPE_SECRET_KEY = 'sk_test_51OxOBC2LcDfep72U7pvLBM6y0BiuKWhcL0EzR89QUbCennzJRAPU8ei19l7HZjmbrgMEU936Iv2W0sjZIqTc3oHb00mMo94wE6'
 STRIPE_PUBLIC_KEY = 'pk_test_51OxOBC2LcDfep72UeTQJU3lGhyNrtxQgqPKIprav9O5KorqJswchk3Yginy5LSsdgrK52XaE7Cgw6djM8rQPaM0z00GtpRZvyz'
+
+JAZZMIN_SETTINGS = {
+    # title of the window
+    'site_title': 'Polls Admin',
+
+    # Title on the login screen
+    'site_header': 'Polls',
+
+    # square logo to use for your site, must be present in static files, used for favicon and brand on top left
+    'site_logo': None,
+
+    # Welcome text on the login screen
+    'welcome_sign': 'Welcome to polls',
+
+    # Copyright on the footer
+    'copyright': 'Acme Ltd',
+
+    # The model admin to search from the search bar, search bar omitted if excluded
+    'search_model': 'auth.User',
+
+    # Field name on user model that contains avatar image
+    'user_avatar': None,
+
+    # Links to put along the top menu
+    'topmenu_links': [
+
+        # Url that gets reversed (Permissions can be added)
+        {'name': 'Home', 'url': 'admin:index', 'permissions': ['auth.view_user']},
+
+        # external url that opens in a new window (Permissions can be added)
+        {'name': 'Support', 'url': 'https://github.com/farridav/django-jazzmin/issues', 'new_window': True},
+
+        # model admin to link to (Permissions checked against model)
+        {'model': 'auth.User'},
+
+        # App with dropdown menu to all its models pages (Permissions checked against models)
+        {'app': 'polls'},
+    ],
+
+    # Whether to display the side menu
+    'show_sidebar': True,
+
+    # Whether to aut expand the menu
+    'navigation_expanded': True,
+
+    # Hide these apps when generating side menu
+    'hide_apps': [],
+
+    # Hide these models when generating side menu
+    'hide_models': [],
+
+    # List of apps to base side menu ordering off of
+    'order_with_respect_to': ['accounts', 'polls'],
+
+    # Custom links to append to app groups, keyed on app name
+    'custom_links': {
+        'polls': [{
+            'name': 'Make Messages', 'url': 'make_messages', 'icon': 'fa-comments',
+            'permissions': ['polls.view_polls']
+        }]
+    },
+
+    # Custom icons per model in the side menu See https://www.fontawesomecheatsheet.com/font-awesome-cheatsheet-5x/
+    # for a list of icon classes
+    'icons': {
+        'auth.user': 'fa-user',
+    }
+}
+
+# Email Verification
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'bhatkyo@gmail.com'
+EMAIL_HOST_PASSWORD = 'bhsnysbhaqqxkhmm'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'bhatkyo@gmail.com'
