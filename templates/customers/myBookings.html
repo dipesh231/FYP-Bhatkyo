@@ -37,7 +37,11 @@
                                             <p><strong>Time:</strong> {{ booking.date }}</p>
                                             <p><strong>Problem Description:</strong> {{ booking.problem_description }}</p>
                                             <p><strong>Feedback:</strong> {{ booking.feedback }}</p>
+                                            {% if booking.status == 'Completed' %}
+
                                             <a href="{% url 'rate_shop' booking.id %}">Review</a>
+                                            {% endif %}
+
                                             <div class="btn-group" role="group" aria-label="Booking Actions">
                                                 <a href="{% url 'rooms' %}" class="btn btn-success">Initiate Chat</a>
                                                 

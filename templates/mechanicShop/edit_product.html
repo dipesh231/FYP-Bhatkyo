@@ -37,11 +37,11 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="label" for="id_total_quantity">Quantity:</label>
-                                                        <input type="number" class="form-control" id="id_total_quantity" name="total_quantity" value="{{ product.total_quantity }}" required>
+                                                        <input type="number" class="form-control" id="id_total_quantity" name="total_quantity" value="{{ product.total_quantity }}" required readonly>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="label" for="id_availability">Availability:</label>
-                                                        <input type="text" class="form-control" id="id_availability" name="availability" value="{{ product.availability }}" required>
+                                                        <input type="text" class="form-control" id="id_availability" name="availability" value="{{ product.availability }}" required readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -60,9 +60,27 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                        <br>
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3 class="card-title">Add Stock</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="form-group">
+                                                    <label class="label" for="id_stock_quantity">Stock Quantity:</label>
+                                                    <input type="number" class="form-control" id="id_stock_quantity" name="stock_quantity">
+                                                </div>
+                                                <br>
+                                                <div class="form-group">
+                                                    <button type="button" class="btn btn-primary" id="add-stock-btn">Add Stock</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <br>
+                                </div>
+                            </div>
+                                <br>
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-primary">Update Product</button>
                                     </div>
@@ -74,13 +92,29 @@
             </div>
         </div>
     </section>
-    <script>
-        // Calculate new total quantity and display it
-        document.getElementById("id_total_quantity").addEventListener("input", function() {
-            var oldQuantity = {{ product.total_quantity }};
-            var newQuantity = parseInt(this.value);
-            var total = oldQuantity + newQuantity;
-            document.getElementById("total-quantity").innerHTML = total;
+<!-- Your script -->
+<script>
+    $(document).ready(function() {
+        $('#add-stock-btn').click(function() {
+            var stockQuantity = parseInt($('#id_stock_quantity').val());
+            // Check if stockQuantity is a positive number
+            if (stockQuantity > 0 && !isNaN(stockQuantity)) {
+                var currentTotalQuantity = parseInt($('#id_total_quantity').val());
+                var currentAvailability = parseInt($('#id_availability').val());
+
+                var newTotalQuantity = currentTotalQuantity + stockQuantity;
+                var newAvailability = currentAvailability + stockQuantity;
+
+                $('#id_total_quantity').val(newTotalQuantity);
+                $('#id_availability').val(newAvailability);
+                $('#id_stock_quantity').val('');
+
+            } else {
+                // Display an alert or message indicating that only positive numbers are accepted
+                alert('Please enter a positive number for stock quantity.');
+            }
         });
-    </script>
+    });
+</script>
+
 {% endblock %}

@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
-from Accounts.views import check_role_customer
+from Accounts.views import check_role_customer, check_role_shop
 from products.models import Product
 from .models import Invoice, InvoiceProduct, InvoiceService, RateBooking, BookService
 from .forms import BookServiceForm, RateBookingForm
@@ -94,7 +94,7 @@ def book_service(request, shop_id):
             book_service.save()
             book_service.services.set(selected_services)  # Assign selected_service here
             messages.success(request, 'Service booked successfully.')
-            return redirect('index')
+            return redirect('myBookings')
         else:
             print(form.errors)
             print(request.POST)
@@ -125,7 +125,8 @@ def update_booking_status(request):
         booking.status = status
         booking.feedback = feedback
         booking.save()
-        return redirect('shopDashboard')
+        messages.success(request, 'Booking Status Updated')
+        return redirect('bookings')
     
 def rate_shop(request, booking_id):
     booking = get_object_or_404(BookService, pk=booking_id)
@@ -136,6 +137,7 @@ def rate_shop(request, booking_id):
             rate_booking.book_service = booking
             rate_booking.user = request.user
             rate_booking.save()
+            messages.success(request,'Rating is done Successfully')
             return redirect('customerDashboard')  # Redirect to some page after submission
     else:
         form = RateBookingForm()
@@ -150,6 +152,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from products.models import Product
 from .models import Invoice, BookService
 
+@user_passes_test(check_role_shop)
 def create_invoice(request, booking_id):
     booking = get_object_or_404(BookService, id=booking_id)
     

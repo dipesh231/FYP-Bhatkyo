@@ -19,7 +19,12 @@ class Product(models.Model):
         return self.product_name
     
 class ProductPayment(models.Model):
-    user=models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ManyToManyField(Product)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    
+    payment_date = models.DateTimeField(auto_now=True)
+
+class PurchasedProduct(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    payment = models.ForeignKey(ProductPayment, on_delete=models.CASCADE)
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()

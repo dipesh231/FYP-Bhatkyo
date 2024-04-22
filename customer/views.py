@@ -31,6 +31,7 @@ def Cprofile(request):
         'profile_form': profile_form,
         'user_form': user_form,
         'profile': profile,
+        'current_page': "Profile",
     }
     return render(request, 'customers/cprofile.html', context)
 
@@ -43,16 +44,18 @@ def myBookings(request):
         booking.selected_services = booking.services.all() 
     context = {
         'bookings': bookings,
-        'current_page': "Bookings",
+        'current_page': "My Bookings",
     }
     return render(request, 'customers/myBookings.html', context)
 
+@login_required(login_url='login')
+@user_passes_test(check_role_customer)
 def my_booking_details(request, booking_id):
     booking = get_object_or_404(BookService, id=booking_id)
     shop = booking.shop
     return render(request, 'customers/booking_details.html', {'booking': booking, 'shop':shop})
 
-
+@user_passes_test(check_role_customer)
 def view_invoice_detail(request, invoice_id):
     invoice = Invoice.objects.get(id=invoice_id)
     invoice_products = InvoiceProduct.objects.filter(invoice=invoice)
@@ -79,6 +82,7 @@ def view_invoice_detail(request, invoice_id):
 
     return render(request, 'customers/my_invoice_detail.html', context)
 
+@user_passes_test(check_role_customer)
 def mark_as_paid(request, invoice_id):
     invoice = get_object_or_404(Invoice, id=invoice_id)
     if request.method == 'POST':

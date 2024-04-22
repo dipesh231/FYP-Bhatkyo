@@ -2,13 +2,15 @@
 <div class="user-sidebar">
   <nav id="navbar2" class="navbar">
       <ul>
-          <li class = "{% if '/customerDashboard/' == request.path or '/customer/' == request.path %} active {% endif %}"><a href="{% url 'customer' %}" class="active">Dashboard</a></li>
+          <li class = "{% if '/accounts/customerDashboard/' == request.path or '/accounts/customer/' == request.path %} active {% endif %}">
+            <a href="{% url 'customer' %}" class="active">Dashboard</a>
+          </li>
           <li class="{% if 'myBookings' in request.path %}active{% endif %}"><a href="{% url 'myBookings' %}" >My Bookings</a></li>
           <li class="{% if 'profile' in request.path %}active{% endif %}">
             <a href="{% url 'cprofile' %}">Profile</a>
           </li>
-          <li><a href="projects.html">My Orders</a></li>
-          <li><a href="blog.html">Change Password</a></li>
+          <li class="{% if 'orders' in request.path %}active{% endif %}"><a href="{% url 'user_orders' %}">My Orders</a></li>
+          {% comment %} <li><a href="blog.html">Change Password</a></li> {% endcomment %}
           <li><a href="{% url 'logout' %}" class="btn btn-danger ml-3">Logout</span></a></li>
           
       </ul>

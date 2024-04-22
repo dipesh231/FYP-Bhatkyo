@@ -3,24 +3,30 @@
 
 {% block content %}
 {% include 'includes/alerts.html' %}
-{% include 'includes/cover.html' %}
-<section id="blog" class="blog">
-{{ chatroom.name }}
+{% include 'customers/cover.html' %}
+<div class="container">
+    <section id="blog" class="blog">
+        <h1>{{ chatroom.name }}</h1>
 
-<div id="chat-messages">
-    {% for message in messages %}
-        {{ message.user.username }} : {{ message.message_content }}</br>
-    {% endfor %}
+        <div id="chat-messages" class="chat-messages">
+            {% for message in messages %}
+                <div class="message {% if message.user.username == request.user.username %}sent{% else %}received{% endif %}">
+                    <span class="username">{{ message.user.username }}</span>:
+                    <span class="message-content">{{ message.message_content }}</span>
+                    <span class="message-date">{{ message.date }}</span>
+                </div>
+            {% endfor %}
+        </div>
+
+        <form id="message-form" class="message-form" method="post">
+            <input id="message-input" class="message-input" type="text" name="message" placeholder="Enter message">
+            <button id="send-button" class="send-button" type="submit"><i class="fas fa-paper-plane"></i></button>
+        </form>
+
+        {{ chatroom.slug|json_script:"json-chatroomname" }}
+        {{ request.user.username|json_script:"json-username" }}
+    </section>
 </div>
-
-<form method="post">
-    <input id="message-input" type="text" name="message" placeholder="Enter message">
-    <button id="send-button" type="submit">Send</button>
-</form>
-
-{{ chatroom.slug|json_script:"json-chatroomname" }}
-{{ request.user.username|json_script:"json-username" }}
-</section>
 
 <script>
     const chatRoomName = JSON.parse(document.getElementById('json-chatroomname').textContent);
@@ -35,9 +41,14 @@
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
         if (data.message) {
-            console.log('Received message to client is', data.message);
-            let html = data.username + ' : ' + data.message + '</br>';
-            document.getElementById('chat-messages').innerHTML += html;
+            let messageClass = data.username === username ? 'sent' : 'received';
+            let html = `<div class="message ${messageClass}">
+                            <span class="username">${data.username}</span>:
+                            <span class="message-content">${data.message}</span>
+                            <span class="message-date">${data.date}</span>
+                        </div>`;
+            document.getElementById('chat-messages').insertAdjacentHTML('beforeend', html);
+            scrollToBottom();
         } else {
             alert('The message was empty');
         }
@@ -49,15 +60,100 @@
     document.getElementById('send-button').onclick = function(e) {
         e.preventDefault();
         const messageInput = document.getElementById('message-input');
-        const message = messageInput.value;
-        console.log(message);
-
-        chatSocket.send(JSON.stringify({
-            'message': message,
-            'username': username,
-            'room': chatRoomName
-        }));
-        messageInput.value = "";
+        const message = messageInput.value.trim();
+        if (message !== "") {
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'username': username,
+                'room': chatRoomName
+            }));
+            messageInput.value = "";
+        }
     };
+
+    function scrollToBottom() {
+        const chatMessages = document.getElementById('chat-messages');
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    
 </script>
+
+<style>
+  .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+
+  .blog {
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 80%;
+      max-width: 600px;
+  }
+
+  .chat-messages {
+      max-height: 300px; /* Adjust the height as needed */
+      overflow-y: auto;
+  }
+
+  .message {
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 8px;
+  }
+
+  .sent {
+      background-color: #007bff;
+      color: #fff;
+      align-self: flex-end;
+  }
+
+  .received {
+      background-color: #f0f0f0;
+      color: #333;
+      align-self: flex-start;
+  }
+
+  .message-content {
+      margin-left: 5px;
+  }
+
+  .message-date {
+      font-size: 12px;
+      color: black;
+      margin-left: 10px;
+  }
+
+  .message-form {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+  }
+
+  .message-input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      margin-right: 10px;
+  }
+
+  .send-button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+  }
+
+  .send-button:hover {
+      background-color: #0056b3;
+  }
+</style>
 {% endblock %}

@@ -4,6 +4,8 @@
 {% load cart_tag %}
 
 {% block content %}
+{% include 'includes/alerts.html' %}
+
 {% include 'customers/cover.html' %}
 <div class ="productDetail">
 <div class="card">
@@ -26,7 +28,7 @@
                         <div class="row">{{ value.product_name }}</div>
                     </div>
                     <div class="col">
-                        <a href="{% url 'item_decrement' value.product_id %}">-</a><a href="#" class="border">{{ value.quantity }}</a><a href="{% url 'item_increment' value.product_id %}">+</a>
+                        <a href="{% url 'item_decrement' value.product_id %}">-</a><a href="" class="border">{{ value.quantity }}</a><a href="{% url 'item_increment' value.product_id %}">+</a>
                     </div>
                     <div class="col">Rs. {{ value.price }}</div>
                     <div class="col">Rs. {{ value.price|multiply:value.quantity }}</div>
@@ -34,9 +36,10 @@
 
                 </div>
             </div>
+            <a href={% url "cart_clear"  %} ><button id="checkout-button" class="btn">Clear</button></a>
 
             {% endfor %}
-            <div class="back-to-shop"><a href="{% url 'index' %}">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
+            <div class="back-to-shop"><a href="{% url 'show_products' %}">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
         </div>
         <div class="col-md-4 summary">
             <div><h5><b>Summary</b></h5></div>
@@ -55,4 +58,6 @@
     </div>
 </div>
 </div>
+<br>
+<br>
 {% endblock  %}

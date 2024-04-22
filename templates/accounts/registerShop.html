@@ -11,7 +11,7 @@
 <section class="ftco-section">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-6 text-center mb-5">
+            <div class=" text-center mb-5">
                 <h2 class="heading-section">Register Shop</h2>
             </div>
         </div>
@@ -25,98 +25,93 @@
                             <div class="w-100">
                                 <h3 class="mb-4">Register Shop</h3>
                             </div>
-                            <div class="w-100">
-                                <p class="social-media d-flex justify-content-end">
-                                    <a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-facebook"></span></a>
-                                    <a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-twitter"></span></a>
-                                </p>
-                            </div>
+                            
                         </div>
                         <form action="{% url 'registerShop' %}" class="signin-form" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group ">
                                     <label class="label" for="name">Owner Name</label>
                                     <input type="text" class="form-control" id="id_name" name="name" placeholder="Name" required>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group ">
                                     <label class="label" for="email">Email</label>
                                     <input type="email" class="form-control" id="id_email" name="email" placeholder="Email" required>
                                 </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group ">
                                     <label class="label" for="username">Username</label>
                                     <input type="text" class="form-control" id="id_username" name="username" placeholder="Username" required>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group ">
                                     <label class="label" for="phone_number">Phone Number</label>
                                     <input type="tel" class="form-control" id="id_phone_number" name="phone_number" placeholder="Phone Number" required>
                                 </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group ">
                                     <label class="label" for="shop_name">Shop Name</label>
                                     <input type="text" class="form-control" id="id_shop_name" name="shop_name" placeholder="Shop Name" required>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group ">
                                     <label class="label" for="password">Password</label>
                                     <input type="password" class="form-control" id="id_password" name="password" placeholder="Password" required>
                                 </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group ">
                                     <label class="label" for="confirm_password">Confirm Password</label>
                                     <input type="password" class="form-control" id="id_confirm_password" name="confirm_password" placeholder="Confirm Password" required>
                                 </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group ">
                                     <label class="label" for="vehicles">Vehicles</label><br>
                                     {% for value, label in vehicle_choices %}
                                         <input type="radio" id="{{ value }}" name="vehicles" value="{{ value }}">
                                         <label for="{{ value }}">{{ label }}</label><br>
                                     {% endfor %}
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-5">
                                     <label class="label" for="profile_photo">Profile Photo</label>
                                     <input type="file" class="form-control-file" id="id_profile_photo" name="profile_photo" accept="image/*">
                                 </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-5">
                                     <label class="label" for="shop_lisence">Shop License</label>
                                     <input type="file" class="form-control-file" id="id_shop_lisence" name="shop_lisence" accept="image/*">
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-5">
                                     <label class="label" for="shop_image">Shop Image</label>
                                     <input type="file" class="form-control-file" id="id_shop_image" name="shop_image" accept="image/*">
                                 </div>
                                 <div class="form-row">
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group ">
                                         <label class="label" for="address">Shop Address</label>
                                         <input type="text" class="form-control" id="id_address" name="address" readonly>
                                     </div>
                                 </div>
                                 <div class="form-row">
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group ">
                                         <label class="label" for="latitude">Latitude</label>
                                         <input type="text" class="form-control" id="id_latitude" name="latitude" readonly>
                                     </div>
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group ">
                                         <label class="label" for="longitude">Longitude</label>
                                         <input type="text" class="form-control" id="id_longitude" name="longitude" readonly>
                                     </div>
                                 </div>
                                 <div class="form-row">
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group ">
                                         <label class="label" for="map">Pinpoint Address on Map</label>
                                         <div id="map" style="height: 300px;"></div>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group ">
                                     <label class="label" for="services">Services</label>
                                     <div class="checkbox-group">
                                         {% for service in services %}

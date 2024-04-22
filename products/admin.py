@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Product,ProductPayment
+from .models import Product, ProductPayment, PurchasedProduct
 
 # Register your models here.
 class ProductAdmin(admin.ModelAdmin):
@@ -8,5 +8,16 @@ class ProductAdmin(admin.ModelAdmin):
     list_display_links = ('user', 'product_name')
 
 admin.site.register(Product, ProductAdmin)
-admin.site.register(ProductPayment)
-# admin.site.register(Payment)
+
+class PurchasedProductInline(admin.TabularInline):
+    model = PurchasedProduct
+    extra = 0
+
+@admin.register(ProductPayment)
+class ProductPaymentAdmin(admin.ModelAdmin):
+    list_display = ('user', 'amount', 'payment_date')
+    inlines = [PurchasedProductInline]
+
+@admin.register(PurchasedProduct)
+class PurchasedProductAdmin(admin.ModelAdmin):
+    list_display = ('product', 'payment', 'shop', 'quantity')

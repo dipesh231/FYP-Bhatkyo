@@ -93,7 +93,8 @@ def Products(request):
     products = Product.objects.filter(user=shop)
     
     context = {
-        'products': products
+        'products': products,
+        'current_page': "Products",
     }
     return render(request, 'mechanicShop/products.html', context)
 
@@ -102,7 +103,6 @@ def Products(request):
 def product_detail(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     return render(request, 'mechanicShop/productDetail.html', {'product': product})
-from django.core.files.uploadedfile import InMemoryUploadedFile
 
 @login_required(login_url='login')
 @user_passes_test(check_role_shop)
@@ -162,6 +162,8 @@ def delete_booking(request, booking_id):
         messages.success(request, 'Booking deleted successfully.')
     return redirect('bookings')
 
+@login_required(login_url='login')
+@user_passes_test(check_role_shop)
 def booking_details(request, booking_id):
     booking = get_object_or_404(BookService, id=booking_id)
     return render(request, 'mechanicShop/booking_details.html', {'booking': booking})

@@ -30,7 +30,7 @@ class BookService(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return self.problem_description
+        return self.user.name
     
 def get_vehicles_display(self):
         return dict(self.vehicle_choices).get(self.vehicles, '')

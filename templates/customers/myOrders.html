@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+{% include 'includes/alerts.html' %}
+{% include 'customers/cover.html' %}
+
+<section id="blog" class="blog">
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="page-section account-header buyer-logged-in">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                    <!-- Load the sidebar here -->
+                    {% include 'includes/c_sidebar.html' %}
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                    <div class="user-dashboard loader-holder">
+                        <div class="user-holder">
+                            <h2>Your Orders</h2>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Order Date</th>
+                                            <th>Total Amount</th>
+                                            <th>Product Name</th>
+                                            <th>Shop Name</th>
+                                            <th>Quantity</th>
+                                            <th>Price</th>
+                                            <th>Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for order in orders_info %}
+                                            <tr>
+                                                <td rowspan="{{ order.products_info|length }}">{{ order.order_id }}</td>
+                                                <td rowspan="{{ order.products_info|length }}">{{ order.order_date }}</td>
+                                                <td rowspan="{{ order.products_info|length }}">Rs. {{ order.total_amount }}</td>
+                                                {% for product_info in order.products_info %}
+                                                    {% if forloop.first %}
+                                                        <td>{{ product_info.product_name }}</td>
+                                                        <td>{{ product_info.shop_name }}</td>
+                                                        <td>{{ product_info.quantity }}</td>
+                                                        <td>Rs.{{ product_info.price }}</td>
+                                                        <td> Rs. {{ product_info.subtotal }}</td>
+                                                    {% else %}
+                                                        <tr>
+                                                            <td>{{ product_info.product_name }}</td>
+                                                            <td>{{ product_info.shop_name }}</td>
+                                                            <td>{{ product_info.quantity }}</td>
+                                                            <td>Rs.{{ product_info.price }}</td>
+                                                            <td> Rs. {{ product_info.subtotal }}</td>
+
+                                                        </tr>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
